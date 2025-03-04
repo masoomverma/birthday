@@ -179,7 +179,7 @@ const Surprise = () => {
       {showFinalMessage ? (
         <>
           <DialogueBox 
-            animal="bunny" 
+            animal="lion" 
             message="Congratulations on completing the birthday journey! Here's your final surprise - some special birthday wishes and effects just for you!"
           />
           

@@ -40,14 +40,14 @@ const ThankYou = () => {
         <img 
           src="/assets/gift-box.png" 
           alt="Birthday gift" 
-          style={{ width: '150px', marginBottom: '20px' }}
+          style={{ width: '150px', marginBottom: '10px' }}
           onError={(e) => {
             e.target.src = 'https://via.placeholder.com/150?text=Gift';
           }}
         />
       </div>
       
-      <p style={{ textAlign: 'center', fontSize: '1.2rem' }}>
+      <p style={{ textAlign: 'left', fontSize: '1.2rem' }}>
         Thank you for being such an amazing person! This little web adventure is my gift to you.
       </p>
       

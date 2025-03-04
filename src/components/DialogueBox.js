@@ -14,17 +14,12 @@ const animals = {
   bear: {
     name: 'Teddy',
     image: 'https://img.icons8.com/color/96/000000/bear.png',
-    color: 'rgba(222, 184, 135, 0.7)'
-  },
-  penguin: {
-    name: 'Waddles',
-    image: 'https://img.icons8.com/color/96/000000/penguin.png',
-    color: 'rgba(173, 216, 230, 0.7)'
+    color: 'rgba(222, 184, 135, 0.54)'
   },
   dog: {
     name: 'Buddy',
     image: 'https://img.icons8.com/color/96/000000/dog.png',
-    color: 'rgba(210, 180, 140, 0.7)'
+    color: 'rgba(210, 180, 140, 0.57)'
   },
   fox: {
     name: 'Foxy',
@@ -34,22 +29,17 @@ const animals = {
   owl: {
     name: 'Hootie',
     image: 'https://img.icons8.com/color/96/000000/owl.png',
-    color: 'rgba(188, 143, 143, 0.7)'
-  },
-  elephant: {
-    name: 'Ellie',
-    image: 'https://img.icons8.com/color/96/000000/elephant.png',
-    color: 'rgba(169, 169, 169, 0.7)'
+    color: 'rgba(188, 143, 143, 0.54)'
   },
   panda: {
     name: 'Bamboo',
     image: 'https://img.icons8.com/color/96/000000/panda.png',
-    color: 'rgba(220, 220, 220, 0.7)'
+    color: 'rgba(220, 220, 220, 0.56)'
   },
   lion: {
     name: 'Roary',
     image: 'https://img.icons8.com/color/96/000000/lion.png',
-    color: 'rgba(255, 215, 0, 0.7)'
+    color: 'rgba(255, 218, 11, 0.24)'
   }
 };
 
