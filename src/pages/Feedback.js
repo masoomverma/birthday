@@ -1,0 +1,104 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import DialogueBox from '../components/DialogueBox';
+import { saveChoice, isSavingAllowed } from '../utils/saveChoice';
+
+const Feedback = () => {
+  const navigate = useNavigate();
+  const [message, setMessage] = useState('');
+  const [rating, setRating] = useState(0);
+  const [isSaving, setIsSaving] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSaving(true);
+    
+    if (isSavingAllowed()) {
+      await saveChoice('feedback', 'birthday message', {
+        message,
+        rating
+      }, true);
+    }
+    
+    setIsSaving(false);
+    setSubmitted(true);
+    
+    setTimeout(() => {
+      navigate('/quiz');
+    }, 2000);
+  };
+  
+  const renderStars = () => {
+    return Array(5).fill(0).map((_, i) => (
+      <span 
+        key={i} 
+        onClick={() => setRating(i + 1)}
+        style={{
+          cursor: 'pointer',
+          fontSize: '2rem',
+          color: i < rating ? '#ffc107' : '#e4e5e9'
+        }}
+      >
+        ★
+      </span>
+    ));
+  };
+
+  return (
+    <div className="glass-container">
+      <h1 className="title">Birthday Wishes for Masoom! 🎉</h1>
+      
+      <DialogueBox 
+        animal="cat" 
+        message="Would you like to leave a special birthday message for Masoom? It will make their day even more special!"
+      />
+      
+      {!submitted ? (
+        <form onSubmit={handleSubmit} style={{ margin: '20px 0' }}>
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
+              Your Birthday Message:
+            </label>
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              rows={4}
+              style={{
+                width: '100%',
+                padding: '10px',
+                borderRadius: '10px',
+                border: '1px solid #ddd',
+                resize: 'vertical'
+              }}
+              placeholder="Write your special message here..."
+            />
+          </div>
+          
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
+              How awesome is Masoom? (1-5 stars)
+            </label>
+            <div>{renderStars()}</div>
+          </div>
+          
+          <button 
+            type="submit" 
+            className="btn" 
+            disabled={isSaving}
+            style={{ width: '100%' }}
+          >
+            {isSaving ? 'Sending wishes...' : 'Send Birthday Wishes! 💫'}
+          </button>
+        </form>
+      ) : (
+        <div style={{ textAlign: 'center', padding: '20px' }}>
+          <h2>Thank you for your message! ❤️</h2>
+          <p>Moving to the next surprise...</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Feedback;
