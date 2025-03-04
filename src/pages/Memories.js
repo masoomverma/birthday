@@ -88,7 +88,7 @@ const Memories = () => {
       
       <DialogueBox 
         animal="bear" 
-        message="Here are some of our favorite moments together, Masoom! I hope they bring back wonderful memories."
+        message="Here are Masoom's favorite moments with you, U! I hope they bring back wonderful memories."
       />
       
       <div className="memories-grid">
@@ -109,7 +109,7 @@ const Memories = () => {
       
       <div style={{ textAlign: 'center', margin: '30px 0' }}>
         <button className="btn" onClick={handleContinue}>
-          Continue to Next Surprise! 🎁
+          Continue to thoughts 💭
         </button>
       </div>
     </div>

@@ -174,7 +174,7 @@ const Surprise = () => {
 
   return (
     <div className="glass-container">
-      <h1 className="title">Your Special Surprise! 🎉</h1>
+      <h1 className="title">The Little journey ends here</h1>
       
       {showFinalMessage ? (
         <>

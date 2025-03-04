@@ -34,7 +34,7 @@ const Wishing = () => {
       
       <DialogueBox 
         animal="bunny" 
-        message="Masoom, I hope your day is as special as you are! Quick question before we continue - is it okay if we see your choices and answers on this little birthday journey?"
+        message="U, I hope your day is as special as you are! Quick question before we continue, is it okay if Masoom see your choices and answers on this little birthday journey?"
       >
         <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '15px' }}>
           <button 

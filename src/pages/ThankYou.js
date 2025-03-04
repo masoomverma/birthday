@@ -29,11 +29,11 @@ const ThankYou = () => {
 
   return (
     <div className="glass-container">
-      <h1 className="title">Happy Birthday Masoom 🎊!</h1>
+      <h1 className="title">Happy Birthday U 🎊!</h1>
       
       <DialogueBox 
         animal="panda" 
-        message="Ye chota sa gift meri tarf se, Thank U 😊 surprise dekhane ke liye."
+        message="Ye chhota sa gift Masoom ki taraf se, Thank U 😊 surprise dekhne ke liye."
       />
       
       <div className="floating">

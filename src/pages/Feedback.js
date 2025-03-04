@@ -25,7 +25,7 @@ const Feedback = () => {
     setSubmitted(true);
     
     setTimeout(() => {
-      navigate('/quiz');
+      navigate('/surprise');
     }, 2000);
   };
   
@@ -47,11 +47,11 @@ const Feedback = () => {
 
   return (
     <div className="glass-container">
-      <h1 className="title">Birthday Wishes🎉</h1>
+      <h1 className="title">What are you thinking?</h1>
       
       <DialogueBox 
         animal="dog" 
-        message="Would you like to leave a message for Masoom?"
+        message="Would you like to share your thoughts? How much did you enjoy the birthday? How was your experience throughout the whole day?"
       />
       
       {!submitted ? (
@@ -77,7 +77,7 @@ const Feedback = () => {
           
           <div style={{ marginBottom: '20px' }}>
             <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
-              How awesome is was the surprise?
+              How awesome was the surprise?
             </label>
             <div>{renderStars()}</div>
           </div>
