@@ -50,7 +50,7 @@ const Feedback = () => {
       <h1 className="title">Birthday Wishes🎉</h1>
       
       <DialogueBox 
-        animal="cat" 
+        animal="dog" 
         message="Would you like to leave a message for Masoom?"
       />
       

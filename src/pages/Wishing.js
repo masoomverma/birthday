@@ -56,7 +56,7 @@ const Wishing = () => {
       </DialogueBox>
       
       {choice !== null && (
-        <p style={{ textAlign: 'center', marginTop: '20px', fontStyle: 'italic' }}>
+        <p style={{ textAlign: 'left', marginTop: '20px', fontStyle: 'italic' }}>
           {choice ? 
             "Thanks! We'll be able to see your choices. Moving to the next page..." :
             "No problem! Your choices will be kept private. Moving to the next page..."}

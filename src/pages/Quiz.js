@@ -63,7 +63,7 @@ const Quiz = () => {
   };
   
   const handleFinish = () => {
-    navigate('/home');
+    navigate('/surprise'); // Changed from /home to /surprise
   };
 
   if (showResults) {
@@ -72,7 +72,7 @@ const Quiz = () => {
         <h1 className="title">Quiz Results! 🎯</h1>
         
         <DialogueBox 
-          animal="penguin" 
+          animal="owl" 
           message={`You scored ${score} out of ${QUESTIONS.length}! ${
             score === QUESTIONS.length 
               ? "Wow, you know Masoom so well!" 
@@ -124,7 +124,7 @@ const Quiz = () => {
       </div>
       
       <DialogueBox 
-        animal="bunny" 
+        animal="fox" 
         message={question.question}
       >
         <div style={{ 

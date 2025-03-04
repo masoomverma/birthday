@@ -32,7 +32,7 @@ const ThankYou = () => {
       <h1 className="title">Happy Birthday Masoom!</h1>
       
       <DialogueBox 
-        animal="penguin" 
+        animal="panda" 
         message="Ye chota sa gift meri tarf se, Thank U 😊 surprise dekhane ke liye."
       />
       

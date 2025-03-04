@@ -7,13 +7,13 @@ const fetchChoices = async () => {
     querySnapshot.forEach((doc) => {
       const data = doc.data();
       if (data.allowMasoom) {
-        console.log("👀 Choice:", data.choice);
+        console.log("Choice:", data.choice);
       } else {
-        console.log("🚫 Masoom is not allowed to see this choice.");
+        console.log("Masoom is not allowed to see this choice.");
       }
     });
   } catch (error) {
-    console.error("❌ Error fetching choices: ", error);
+    console.error("Error fetching choices: ", error);
   }
 };
 
