@@ -180,7 +180,7 @@ const Surprise = () => {
         <>
           <DialogueBox 
             animal="lion" 
-            message="Congratulations on completing the birthday journey! Here's your final surprise - some special birthday wishes and effects just for you!"
+            message="Congratulations on completing the birthday journey! Here's the final message from Masoom."
           />
           
           <div className="special-message" style={{
@@ -199,7 +199,7 @@ const Surprise = () => {
               May this new year of your life be filled with laughter, love, and all the beautiful things you wish for!"
             </p>
             <p style={{ fontSize: '1.3rem', fontWeight: 'bold', marginTop: '20px' }}>
-              Once again Happy Birthday! 🎂
+              Once again wish you the Happiest Birthday Yrrrr! 🎂
             </p>
           </div>
           
