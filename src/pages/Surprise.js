@@ -194,9 +194,9 @@ const Surprise = () => {
           }}>
             <h2 style={{ color: '#ff6b6b' }}>Dear Masoom,</h2>
             <p style={{ fontSize: '1.2rem', lineHeight: '1.6', padding: '10px 20px' }}>
-              On this special day, we want you to know how much joy and happiness you bring to our lives.
-              Your kindness, your smile, and your wonderful spirit make the world a brighter place.
-              May this new year of your life be filled with laughter, love, and all the beautiful things you deserve!
+              "On this special day, I want you to know how much joy and happiness you bring to my journey.
+              Keep smiling always, and may God bless you with everything you deserve.
+              May this new year of your life be filled with laughter, love, and all the beautiful things you wish for!"
             </p>
             <p style={{ fontSize: '1.3rem', fontWeight: 'bold', marginTop: '20px' }}>
               Once again Happy Birthday! 🎂
@@ -258,7 +258,7 @@ const Surprise = () => {
         fontSize: '1.1rem',
         opacity: 0.8
       }}>
-        <p>Made with ❤️ especially for you</p>
+        <p>Made with ❤️ especially for U</p>
       </div>
     </div>
   );
