@@ -33,7 +33,7 @@ const ThankYou = () => {
       
       <DialogueBox 
         animal="penguin" 
-        message="Welcome to your special birthday surprise! We've put together something just for you."
+        message="Ye chota sa gift meri tarf se, Thank U 😊 surprise dekhane ke liye."
       />
       
       <div className="floating">
@@ -48,7 +48,7 @@ const ThankYou = () => {
       </div>
       
       <p style={{ textAlign: 'center', fontSize: '1.2rem' }}>
-        Thank you for being such an amazing person! This little web adventure is our gift to you.
+        Thank you for being such an amazing person! This little web adventure is my gift to you.
       </p>
       
       <div style={{ textAlign: 'center', marginTop: '30px' }}>

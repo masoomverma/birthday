@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 
 // Import pages
-import Home from './pages/Home';
+import Surprise from './pages/Surprise';
 import Quiz from './pages/Quiz';
 import ThankYou from './pages/ThankYou';
 import Wishing from './pages/Wishing';
@@ -20,7 +20,7 @@ function App() {
           <Route path="/memories" element={<Memories />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/quiz" element={<Quiz />} />
-          <Route path="/home" element={<Home />} />
+          <Route path="/surprise" element={<Surprise />} />
         </Routes>
       </Router>
     </div>

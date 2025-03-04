@@ -2,14 +2,46 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import DialogueBox from '../components/DialogueBox';
 
-// This would be replaced with actual memory data
+// Simple array of memories combining both images and videos
 const MEMORIES = [
-  { id: 1, image: '/assets/memories/memory1.jpg', caption: 'Remember this day?' },
-  { id: 2, image: '/assets/memories/memory2.jpg', caption: 'Such a fun time!' },
-  { id: 3, image: '/assets/memories/memory3.jpg', caption: 'One of my favorites!' },
-  { id: 4, image: '/assets/memories/memory4.jpg', caption: 'Classic Masoom!' },
-  { id: 5, image: '/assets/memories/memory5.jpg', caption: 'Great memories!' },
-  { id: 6, image: '/assets/memories/memory6.jpg', caption: 'Unforgettable!' },
+  // Images
+  { 
+    id: 1, 
+    type: 'image',
+    source: '/assets/images/memory1.jpg', 
+    caption: 'Our first day together!' 
+  },
+  { 
+    id: 2, 
+    type: 'image',
+    source: '/assets/images/memory2.jpg', 
+    caption: 'Remember this adventure?' 
+  },
+  { 
+    id: 3, 
+    type: 'image',
+    source: '/assets/images/memory3.jpg', 
+    caption: 'That special celebration!' 
+  },
+  // Videos
+  { 
+    id: 4, 
+    type: 'video',
+    source: '/assets/videos/memory1.mp4', 
+    caption: 'That time we couldn\'t stop laughing!' 
+  },
+  { 
+    id: 5, 
+    type: 'image',
+    source: '/assets/images/memory4.jpg', 
+    caption: 'One of my favorite moments' 
+  },
+  { 
+    id: 6, 
+    type: 'video',
+    source: '/assets/videos/memory2.mp4', 
+    caption: 'Dancing like nobody\'s watching!' 
+  }
 ];
 
 const Memories = () => {
@@ -19,27 +51,58 @@ const Memories = () => {
     navigate('/feedback');
   };
   
+  // Render either image or video based on type
+  const renderMedia = (memory) => {
+    if (memory.type === 'image') {
+      return (
+        <img 
+          src={memory.source} 
+          alt={memory.caption} 
+          className="memory-img"
+          onError={(e) => {
+            e.target.src = `https://via.placeholder.com/300x200?text=Memory`;
+          }}
+        />
+      );
+    } else if (memory.type === 'video') {
+      return (
+        <video 
+          className="memory-video" 
+          controls
+          preload="metadata"
+          onError={(e) => {
+            e.target.parentNode.innerHTML = 'Video unavailable';
+          }}
+        >
+          <source src={memory.source} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      );
+    }
+    return null;
+  };
+  
   return (
     <div className="glass-container">
-      <h1 className="title">Special Memories 💖</h1>
+      <h1 className="title">Our Special Memories 💖</h1>
       
       <DialogueBox 
         animal="bear" 
-        message="Here are some of our favorite moments with you. Each one is special, just like you!"
+        message="Here are some of our favorite moments together, Masoom! I hope they bring back wonderful memories."
       />
       
       <div className="memories-grid">
         {MEMORIES.map(memory => (
           <div key={memory.id} className="memory-card">
-            <img 
-              src={memory.image} 
-              alt={`Memory ${memory.id}`} 
-              className="memory-img"
-              onError={(e) => {
-                e.target.src = `https://via.placeholder.com/300x200?text=Memory+${memory.id}`;
-              }}
-            />
-            <p style={{ textAlign: 'center', padding: '10px' }}>{memory.caption}</p>
+            {renderMedia(memory)}
+            <p style={{ 
+              textAlign: 'center', 
+              padding: '10px',
+              background: 'rgba(255,255,255,0.5)',
+              margin: '0' 
+            }}>
+              {memory.caption}
+            </p>
           </div>
         ))}
       </div>

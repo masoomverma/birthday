@@ -47,18 +47,18 @@ const Feedback = () => {
 
   return (
     <div className="glass-container">
-      <h1 className="title">Birthday Wishes for Masoom! 🎉</h1>
+      <h1 className="title">Birthday Wishes🎉</h1>
       
       <DialogueBox 
         animal="cat" 
-        message="Would you like to leave a special birthday message for Masoom? It will make their day even more special!"
+        message="Would you like to leave a message for Masoom?"
       />
       
       {!submitted ? (
         <form onSubmit={handleSubmit} style={{ margin: '20px 0' }}>
           <div style={{ marginBottom: '20px' }}>
             <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
-              Your Birthday Message:
+              Message to Masoom:
             </label>
             <textarea
               value={message}
@@ -71,13 +71,13 @@ const Feedback = () => {
                 border: '1px solid #ddd',
                 resize: 'vertical'
               }}
-              placeholder="Write your special message here..."
+              placeholder="Write your message here..."
             />
           </div>
           
           <div style={{ marginBottom: '20px' }}>
             <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
-              How awesome is Masoom? (1-5 stars)
+              How awesome is was the surprise?
             </label>
             <div>{renderStars()}</div>
           </div>
