@@ -51,7 +51,7 @@ const Feedback = () => {
       
       <DialogueBox 
         animal="dog" 
-        message="Would you like to share your thoughts? How much did you enjoy this little web journey? Did my surprise bring a smile to your face?"
+        message="Would you like to share your thoughts? How much did you enjoy this little web journey? Did Masoom's surprise bring a smile to your face?"
       />
       
       {!submitted ? (

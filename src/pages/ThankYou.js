@@ -48,7 +48,7 @@ const ThankYou = () => {
       </div>
       
       <p style={{ textAlign: 'left', fontSize: '1.2rem' }}>
-      Thank you for being such an amazing person! Thank you for being my best friend. I am truly glad to have you as a friend. Keep smiling, as your name means 'one who smiles'!
+      Thank you for being such an <strong>amazing person!</strong> and also thank you for being my <strong>best friend</strong>. I am truly glad to have you as a <strong>friend</strong>. Keep smiling, as your name means '<strong>one who smiles</strong>'!
       </p>
       
       <div style={{ textAlign: 'center', marginTop: '30px' }}>

@@ -51,25 +51,43 @@ const Surprise = () => {
     setActiveEffect(effect);
     
     if (effect === 'hearts') {
-      // Heart effect
-      if (window.confetti) {
-        const defaults = { startVelocity: 15, spread: 100, ticks: 50, zIndex: 0 };
-        const count = 80;
-        
-        for (let i = 0; i < count; ++i) {
-          window.confetti(Object.assign({}, defaults, {
-            particleCount: 1,
-            origin: {
-              x: Math.random(),
-              y: Math.random() - 0.2
-            },
-            colors: ['#ff6b6b', '#ff9eb5'],
-            shapes: ['heart']
-          }));
+      
+      const createHeartsAtPoint = (x, y) => {
+        if (window.confetti) {
+          const defaults = { startVelocity: 15, spread: 100, ticks: 50, zIndex: 0 };
+          const count = 50; 
+          
+          for (let i = 0; i < count; ++i) {
+            window.confetti(Object.assign({}, defaults, {
+              particleCount: 1,
+              origin: {
+                x: x / window.innerWidth,
+                y: y / window.innerHeight
+              },
+              colors: ['#ff6b6b', '#ff9eb5'],
+              shapes: ['heart']
+            }));
+          }
         }
-      }
+      };
+      
+      const button = document.querySelector('.effect-buttons button:first-child');
+      const rect = button.getBoundingClientRect();
+      const buttonCenterX = rect.left + rect.width / 2;
+      const buttonCenterY = rect.top + rect.height / 2;
+      createHeartsAtPoint(buttonCenterX, buttonCenterY);
+      
+      const heartClickHandler = (e) => {
+        createHeartsAtPoint(e.clientX, e.clientY);
+      };
+      
+      document.addEventListener('click', heartClickHandler);
+      
+      setTimeout(() => {
+        document.removeEventListener('click', heartClickHandler);
+      }, 5000);
     } else if (effect === 'fireworks') {
-      // Fireworks effect
+      
       if (window.confetti) {
         const end = Date.now() + 5 * 1000;
         
@@ -97,7 +115,7 @@ const Surprise = () => {
         }());
       }
     } else if (effect === 'balloons') {
-      // Add more CSS balloons animation
+      
       const container = document.createElement('div');
       container.style.position = 'fixed';
       container.style.top = '0';
@@ -117,7 +135,6 @@ const Surprise = () => {
         balloon.style.bottom = '-50px';
         balloon.style.left = `${Math.random() * 100}%`;
         
-        // Random balloon color
         const colors = [
           'linear-gradient(135deg, #ff9eb5, #ff6b6b)',
           'linear-gradient(135deg, #90caf9, #5c6bc0)',
@@ -127,7 +144,6 @@ const Surprise = () => {
         ];
         balloon.style.background = colors[Math.floor(Math.random() * colors.length)];
         
-        // Add string
         const string = document.createElement('div');
         string.style.position = 'absolute';
         string.style.bottom = '-20px';
@@ -138,7 +154,6 @@ const Surprise = () => {
         string.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
         balloon.appendChild(string);
         
-        // Animation
         const duration = Math.random() * 5 + 5;
         const delay = Math.random() * 2;
         balloon.style.animation = `floatUp ${duration}s ease-in ${delay}s forwards`;
@@ -146,7 +161,6 @@ const Surprise = () => {
         container.appendChild(balloon);
       }
       
-      // Add animation keyframes
       const style = document.createElement('style');
       style.textContent = `
         @keyframes floatUp {
@@ -166,7 +180,6 @@ const Surprise = () => {
       }, 15000);
     }
     
-    // Reset active effect after some time
     setTimeout(() => {
       setActiveEffect(null);
     }, 5000);
