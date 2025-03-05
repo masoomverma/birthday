@@ -4,9 +4,9 @@ import './App.css';
 
 // Import pages
 import Surprise from './pages/Surprise';
-import Quiz from './pages/Quiz';
+import Ques from './pages/Ques';
 import ThankYou from './pages/ThankYou';
-import Wishing from './pages/Wishing';
+import WillYou from './pages/WillYou';
 import Memories from './pages/Memories';
 import Feedback from './pages/Feedback';
 import PageDecorations from './components/PageDecorations';
@@ -34,10 +34,10 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<ThankYou />} />
-          <Route path="/wishing" element={<Wishing />} />
+          <Route path="/willyou" element={<WillYou />} />
           <Route path="/memories" element={<Memories />} />
           <Route path="/feedback" element={<Feedback />} />
-          <Route path="/quiz" element={<Quiz />} />
+          <Route path="/ques" element={<Ques />} />
           <Route path="/surprise" element={<Surprise />} />
         </Routes>
       </Router>

@@ -54,7 +54,7 @@ const Surprise = () => {
       // Heart effect
       if (window.confetti) {
         const defaults = { startVelocity: 15, spread: 100, ticks: 50, zIndex: 0 };
-        const count = 40;
+        const count = 80;
         
         for (let i = 0; i < count; ++i) {
           window.confetti(Object.assign({}, defaults, {
@@ -139,8 +139,8 @@ const Surprise = () => {
         balloon.appendChild(string);
         
         // Animation
-        const duration = Math.random() * 5 + 10;
-        const delay = Math.random() * 5;
+        const duration = Math.random() * 5 + 5;
+        const delay = Math.random() * 2;
         balloon.style.animation = `floatUp ${duration}s ease-in ${delay}s forwards`;
         
         container.appendChild(balloon);
@@ -174,7 +174,7 @@ const Surprise = () => {
 
   return (
     <div className="glass-container">
-      <h1 className="title">The Little journey ends here</h1>
+      <h1 className="title">The little journey ends here</h1>
       
       {showFinalMessage ? (
         <>
@@ -248,7 +248,7 @@ const Surprise = () => {
       ) : (
         <div className="loading-container" style={{ textAlign: 'center', padding: '40px' }}>
           <div className="loading-spinner"></div>
-          <p>Preparing your birthday surprise...</p>
+          <p>Preparing some effect you might like...</p>
         </div>
       )}
       

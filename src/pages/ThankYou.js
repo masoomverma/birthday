@@ -24,7 +24,7 @@ const ThankYou = () => {
   }, []);
   
   const handleContinue = () => {
-    navigate('/wishing');
+    navigate('/willyou');
   };
 
   return (
@@ -33,7 +33,7 @@ const ThankYou = () => {
       
       <DialogueBox 
         animal="panda" 
-        message="Ye chhota sa gift Masoom ki taraf se, Thank U 😊 surprise dekhne ke liye."
+        message="Ye chhota sa gift (little web adventure) aapke liye Masoom ki taraf se, Thank U 😊 surprise dekhne ke liye."
       />
       
       <div className="floating">
@@ -48,7 +48,7 @@ const ThankYou = () => {
       </div>
       
       <p style={{ textAlign: 'left', fontSize: '1.2rem' }}>
-        Thank you for being such an amazing person! This little web adventure is my gift to you.
+      Thank you for being such an amazing person! Thank you for being my best friend. I am truly glad to have you as a friend. Keep smiling, as your name means 'one who smiles'!
       </p>
       
       <div style={{ textAlign: 'center', marginTop: '30px' }}>

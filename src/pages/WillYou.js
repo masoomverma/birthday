@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import DialogueBox from '../components/DialogueBox';
 import { setSavingPermission } from '../utils/saveChoice';
 
-const Wishing = () => {
+const WillYou = () => {
   const navigate = useNavigate();
   const [choice, setChoice] = useState(null);
   
@@ -14,12 +14,12 @@ const Wishing = () => {
     // Delay to allow user to see their choice
     setTimeout(() => {
       navigate('/memories');
-    }, 1500);
+    }, 2000);
   };
 
   return (
     <div className="glass-container">
-      <h1 className="title">Birthday Wishes! 🎂</h1>
+      <h1 className="title">Will You?</h1>
       
       <div style={{ textAlign: 'center', margin: '20px 0' }}>
         <img 
@@ -66,4 +66,4 @@ const Wishing = () => {
   );
 };
 
-export default Wishing;
+export default WillYou;

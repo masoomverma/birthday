@@ -88,13 +88,13 @@ const Feedback = () => {
             disabled={isSaving}
             style={{ width: '100%' }}
           >
-            {isSaving ? 'Sending wishes...' : 'Send Birthday Wishes! 💫'}
+            {isSaving ? 'Sending message...' : 'Send Your Message 💫'}
           </button>
         </form>
       ) : (
         <div style={{ textAlign: 'center', padding: '20px' }}>
           <h2>Thank you for your message! ❤️</h2>
-          <p>Moving to the next surprise...</p>
+          <p>Moving to the end...</p>
         </div>
       )}
     </div>

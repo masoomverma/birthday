@@ -48,7 +48,7 @@ const Memories = () => {
   const navigate = useNavigate();
   
   const handleContinue = () => {
-    navigate('/feedback');
+    navigate('/ques');
   };
   
   // Render either image or video based on type
@@ -109,7 +109,7 @@ const Memories = () => {
       
       <div style={{ textAlign: 'center', margin: '30px 0' }}>
         <button className="btn" onClick={handleContinue}>
-          Continue to thoughts 💭
+          Few Questions
         </button>
       </div>
     </div>

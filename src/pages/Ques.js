@@ -3,29 +3,35 @@ import { useNavigate } from 'react-router-dom';
 import DialogueBox from '../components/DialogueBox';
 import { saveChoice, isSavingAllowed } from '../utils/saveChoice';
 
-// Sample quiz questions
 const QUESTIONS = [
   {
     id: 1,
-    question: "What's Masoom's favorite color?",
-    options: ["Blue", "Pink", "Purple", "Green"],
-    correctAnswer: "Purple" // Replace with actual answer
+    question: "How was your day?",
+    options: ["Boring", "Okay", "Good", "Amazing"]
   },
   {
     id: 2,
-    question: "What's Masoom's favorite food?",
-    options: ["Pizza", "Pasta", "Sushi", "Ice Cream"],
-    correctAnswer: "Pizza" // Replace with actual answer
+    question: "Did anything special happen today?",
+    options: ["Of cource, Not", "Nothing in particular", "Yes😊", "Absolutely Yes!💯"]
   },
   {
     id: 3,
-    question: "Which describes Masoom best?",
-    options: ["Funny and witty", "Kind and caring", "Creative and artistic", "All of the above"],
-    correctAnswer: "All of the above" // Usually the right answer for birthday folks :)
+    question: "Did anything make you smile today?",  
+    options: ["Not really", "A little", "Yes, a lot!", "Totally!"]
+  },
+  {
+    id: 4,
+    question: "What was the best part of your day?",  
+    options: ["Nothing", "A small moment", "Something exciting", "The whole day!"]
+  },
+  {
+    id: 5,
+    question: "What's one thing you're grateful for today?",  
+    options: ["Nothing", "A person", "An event", "Everything!"]
   }
 ];
 
-const Quiz = () => {
+const Ques = () => {
   const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
@@ -40,13 +46,11 @@ const Quiz = () => {
       setScore(score + 1);
     }
     
-    // Store selected answer
     setSelectedAnswers({
       ...selectedAnswers,
       [question.id]: answer
     });
     
-    // Save to Firebase if allowed
     if (isSavingAllowed()) {
       await saveChoice('quiz', question.question, {
         selectedAnswer: answer,
@@ -54,7 +58,6 @@ const Quiz = () => {
       }, true);
     }
     
-    // Move to next question or show results
     if (currentQuestion < QUESTIONS.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
@@ -63,20 +66,20 @@ const Quiz = () => {
   };
   
   const handleFinish = () => {
-    navigate('/surprise'); // Changed from /home to /surprise
+    navigate('/feedback'); 
   };
 
   if (showResults) {
     return (
       <div className="glass-container">
-        <h1 className="title">Quiz Results! 🎯</h1>
+        <h1 className="title"> So your days was...</h1>
         
         <DialogueBox 
           animal="owl" 
           message={`You scored ${score} out of ${QUESTIONS.length}! ${
             score === QUESTIONS.length 
-              ? "Wow, you know Masoom so well!" 
-              : "You're getting to know Masoom better!"
+              ? "That's awesome! I'm glad you had a great day. Stay positive for an even better tomorrow!"
+              : "Ooo, birthdays can have ups and downs, but let's stay positive and make great memories for the year ahead!"
           }`}
         />
         
@@ -105,7 +108,7 @@ const Quiz = () => {
         </div>
         
         <button className="btn" onClick={handleFinish}>
-          Continue to the Final Surprise! 🎉
+          Continue to thoughts 💭
         </button>
       </div>
     );
@@ -115,7 +118,7 @@ const Quiz = () => {
   
   return (
     <div className="glass-container">
-      <h1 className="title">Birthday Quiz! 🎮</h1>
+      <h1 className="title">How was the day?</h1>
       
       <div style={{ textAlign: 'center', margin: '10px 0' }}>
         <span style={{ fontWeight: 'bold' }}>
@@ -149,4 +152,4 @@ const Quiz = () => {
   );
 };
 
-export default Quiz;
+export default Ques;
