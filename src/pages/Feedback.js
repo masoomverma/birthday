@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DialogueBox from '../components/DialogueBox';
-import { saveFeedback } from '../utils/firebaseUtils';
 import { saveChoice } from '../utils/saveChoice';
 
 const Feedback = () => {
   const navigate = useNavigate();
   const [message, setMessage] = useState('');
   const [isSaving, setIsSaving] = useState(false);
-  const [showStorageInfo, setShowStorageInfo] = useState(false);
   
   const handleSubmit = async () => {
     if (!message.trim()) return;
@@ -16,18 +14,16 @@ const Feedback = () => {
     setIsSaving(true);
     
     try {
-      // Use both saveChoice and direct saveFeedback to ensure data is saved properly
-      await saveFeedback(message, '');
-      
-      // Also save using the standard saveChoice method for consistency
+      // Only save feedback once using the saveChoice method
+      // This will handle both storage in choices collection and feedback collection
       await saveChoice('feedback', 'User Feedback', {
         message: message,
       }, true);
       
-      setShowStorageInfo(true);
+      // Navigate directly to surprise page without showing storage message
       setTimeout(() => {
         navigate('/surprise');
-      }, 3000); // Show storage info for 3 seconds before navigating
+      }, 1000); // Brief delay before navigating for better user experience
     } catch (error) {
       console.error("Error saving feedback:", error);
       navigate('/surprise');
@@ -36,8 +32,25 @@ const Feedback = () => {
     }
   };
   
-  const handleSkip = () => {
-    navigate('/surprise');
+  const handleSkip = async () => {
+    setIsSaving(true);
+    
+    try {
+      // Save a default message when user skips feedback
+      await saveChoice('feedback', 'User Feedback', {
+        message: "No feedback provided",
+      }, true);
+      
+      // Navigate after a brief delay
+      setTimeout(() => {
+        navigate('/surprise');
+      }, 500);
+    } catch (error) {
+      console.error("Error saving skip feedback:", error);
+      navigate('/surprise');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -74,23 +87,6 @@ const Feedback = () => {
           />
         </div>
         
-        {showStorageInfo && (
-          <div style={{
-            padding: '10px',
-            marginTop: '10px',
-            backgroundColor: '#e9f5ff',
-            border: '1px solid #b3e0ff',
-            borderRadius: '5px',
-            fontSize: '0.9rem',
-          }}>
-            <p><strong>Your feedback has been saved to Firebase!</strong></p>
-            <p>✅ Saved to: <code>choices/feedback/[timestamp]</code> collection</p>
-            <p>✅ Also saved to: <code>feedback</code> collection</p>
-            <p>Check it in Firebase console: <code>Authentication &gt; Firestore Database</code></p>
-            <p>Redirecting to surprise page...</p>
-          </div>
-        )}
-        
         <div style={{ 
           display: 'flex', 
           justifyContent: 'center', 
@@ -111,9 +107,10 @@ const Feedback = () => {
           <button 
             className="btn"
             onClick={handleSkip}
+            disabled={isSaving}
             style={{ background: '#888' }}
           >
-            Skip
+            {isSaving ? 'Saving...' : 'Skip'}
           </button>
         </div>
       </div>

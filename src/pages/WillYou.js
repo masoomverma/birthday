@@ -2,14 +2,26 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DialogueBox from '../components/DialogueBox';
 import { setSavingPermission } from '../utils/saveChoice';
+import { saveConsent } from '../utils/firebaseUtils';
 
 const WillYou = () => {
   const navigate = useNavigate();
   const [choice, setChoice] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
   
-  const handleChoice = (allowed) => {
+  const handleChoice = async (allowed) => {
     setChoice(allowed);
     setSavingPermission(allowed);
+    setIsSaving(true);
+    
+    try {
+      // Save consent to the new "consent" collection
+      await saveConsent(allowed);
+    } catch (error) {
+      console.error("Error saving consent:", error);
+    } finally {
+      setIsSaving(false);
+    }
     
     // Delay to allow user to see their choice
     setTimeout(() => {
@@ -40,14 +52,14 @@ const WillYou = () => {
           <button 
             className="btn" 
             onClick={() => handleChoice(true)}
-            disabled={choice !== null}
+            disabled={choice !== null || isSaving}
           >
             Yes, that's fine! 👍
           </button>
           <button 
             className="btn" 
             onClick={() => handleChoice(false)}
-            disabled={choice !== null}
+            disabled={choice !== null || isSaving}
             style={{ background: 'linear-gradient(90deg, #a5b1c2, #778ca3)' }}
           >
             I'd rather not 👋

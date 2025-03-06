@@ -1,57 +1,94 @@
-import { db } from '../firebaseConfig';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../firebaseConfig';
 
 /**
- * Save data to Firebase Firestore
- * @param {string} collectionName - Name of the collection (e.g., 'answers', 'feedback')
- * @param {Object} data - Data to be stored
- * @returns {Promise<string>} - ID of the created document
+ * Save question answer to Firestore
+ * 
+ * @param {string} question - The question text that was asked
+ * @param {string} answer - The user's selected answer
+ * @param {string|null} followUpQuestion - Any follow-up question (if applicable)
+ * @param {string|null} followUpAnswer - Answer to the follow-up question (if applicable)
+ * @param {number|string|null} questionId - Question ID or number
+ * @returns {Promise} - Promise that resolves when data is saved
  */
-export const saveToFirebase = async (collectionName, data) => {
+export const saveQuestionAnswer = async (question, answer, followUpQuestion = null, followUpAnswer = null, questionId = null) => {
   try {
-    const docRef = await addDoc(collection(db, collectionName), {
-      ...data,
-      timestamp: serverTimestamp()
+    // Ensure question ID is never null or undefined
+    const finalQuestionId = questionId || `q${Date.now().toString().substr(-4)}`;
+    
+    // Log the data being saved to help diagnose issues
+    console.log(`Saving answer to Firestore:`, {
+      question,
+      answer, 
+      followUpQuestion,
+      followUpAnswer,
+      questionId: finalQuestionId
     });
-    console.log(`Data saved to ${collectionName} with ID: ${docRef.id}`);
-    return docRef.id;
+    
+    // Create a data object with fields in the specific order requested
+    const data = {
+      questionId: finalQuestionId,  // Store the question number/ID
+      
+      answer: answer,  // Store the selected option
+      timestamp: serverTimestamp()
+    };
+
+    // Add follow-up fields only if they exist
+    if (followUpQuestion) {
+      data.followUpQuestion = followUpQuestion;
+    }
+    
+    if (followUpAnswer) {
+      data.followUpAnswer = followUpAnswer;
+    }
+
+    // Save to Firestore collection "choices"
+    await addDoc(collection(db, "choices"), data);
+    return true;
   } catch (error) {
-    console.error(`Error saving to ${collectionName}:`, error);
-    return null;
+    console.error("Error saving answer to Firestore:", error);
+    throw error;
   }
 };
 
 /**
- * Save question answers to Firebase
- * @param {string} questionText - The question text
- * @param {string} answer - The selected answer
- * @param {string} followUpQuestion - Optional follow-up question
- * @param {string} followUpAnswer - Optional follow-up answer
- * @returns {Promise<string>} - ID of the created document
+ * Save feedback to Firestore
+ * 
+ * @param {string} message - Feedback message from the user
+ * @returns {Promise} - Promise that resolves when data is saved
  */
-export const saveQuestionAnswer = async (questionText, answer, followUpQuestion = null, followUpAnswer = null) => {
-  const data = {
-    question: questionText,
-    answer: answer
-  };
-  
-  if (followUpQuestion && followUpAnswer) {
-    data.followUpQuestion = followUpQuestion;
-    data.followUpAnswer = followUpAnswer;
+export const saveFeedback = async (message) => {
+  try {
+    const data = {
+      message,
+      timestamp: serverTimestamp()
+    };
+    
+    await addDoc(collection(db, "feedback"), data);
+    return true;
+  } catch (error) {
+    console.error("Error saving feedback to Firestore:", error);
+    throw error;
   }
-  
-  return saveToFirebase('answers', data);
 };
 
 /**
- * Save feedback message to Firebase
- * @param {string} message - The feedback message
- * @param {string} mood - The selected mood
- * @returns {Promise<string>} - ID of the created document
+ * Save user consent to Firestore
+ * 
+ * @param {boolean} consentGiven - Whether consent was given by the user
+ * @returns {Promise} - Promise that resolves when data is saved
  */
-export const saveFeedback = async (message, mood) => {
-  return saveToFirebase('feedback', {
-    message,
-    mood
-  });
+export const saveConsent = async (consentGiven) => {
+  try {
+    const data = {
+      consent: consentGiven ? "Yes, that's fine! 👍" : "I'd rather not 👋",
+      timestamp: serverTimestamp()
+    };
+    
+    await addDoc(collection(db, "consent"), data);
+    return true;
+  } catch (error) {
+    console.error("Error saving consent to Firestore:", error);
+    throw error;
+  }
 };
