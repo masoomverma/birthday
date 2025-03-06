@@ -173,10 +173,13 @@ const Ques = () => {
         });
       }
       
-      // Save in background
+      // Save in background with proper parameters for Firebase storing
       if (isSavingAllowed()) {
+        // Use specific follow-up question and response for better Firebase storage
         saveChoice('ques', pendingFollowUp.followUpQuestion, {
-          response: followUpText
+          response: followUpText,
+          followUpQuestion: pendingFollowUp.followUpQuestion,
+          questionId: pendingFollowUp.questionId
         }, true);
       }
     }
@@ -216,10 +219,11 @@ const Ques = () => {
       [question.id]: multiSelectOptions.join(", ")
     });
     
-    // Save choice in background
+    // Save choice in background with specific format for multi-select
     if (isSavingAllowed()) {
       saveChoice('ques', question.question, {
-        selectedAnswer: multiSelectOptions.join(", ")
+        selectedAnswer: multiSelectOptions.join(", "),
+        isMultiSelect: true
       }, true);
     }
     

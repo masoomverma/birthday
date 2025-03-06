@@ -1,18 +1,20 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAHJbJEZN-rIYCLTGJD2p2lfO73wqFbumE",
-  authDomain: "birthday-running-19.firebaseapp.com",
-  projectId: "birthday-running-19",
-  storageBucket: "birthday-running-19.appspot.com",
-  messagingSenderId: "492167999106",
-  appId: "1:492167999106:web:b4b2a18116b0a454a98e9b",
-  measurementId: "G-LWMN9BEN8S",
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const analytics = typeof window !== "undefined" ? getAnalytics(app) : null;
 
-export { db };
+export { app, db, analytics };
