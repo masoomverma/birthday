@@ -88,7 +88,7 @@ const Memories = () => {
       
       <DialogueBox 
         animal="bear" 
-        message="Here are Masoom's favorite moments with you, U! I hope they bring back wonderful memories."
+        message="Here are Masoom's favorite moments with you, User! I hope they bring back wonderful memories."
       />
       
       <div className="memories-grid">
