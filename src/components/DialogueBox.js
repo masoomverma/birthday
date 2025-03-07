@@ -47,8 +47,8 @@ const DialogueBox = ({ animal = 'bunny', message, children }) => {
   const animalData = animals[animal] || animals.bunny;
   
   return (
-    <div className="dialogue-box" style={{ backgroundColor: animalData.color }}>
-      <div className="dialogue-header">
+    <div className="dialogue-box">
+      <div className="animal-container">
         <img 
           src={animalData.image} 
           alt={`${animalData.name}`} 
@@ -78,17 +78,23 @@ const DialogueBox = ({ animal = 'bunny', message, children }) => {
         <h3>{animalData.name} says:</h3>
       </div>
       
-      <p style={{
-        fontSize: '1.1rem',
-        lineHeight: '1.5',
-        margin: '10px 0'
-      }}>{message}</p>
+      <div className="message-container">
+        <p className="message-text">{message}</p>
+        {children && <div className="message-actions">{children}</div>}
+      </div>
       
-      {children && (
-        <div className="dialogue-actions">
-          {children}
-        </div>
-      )}
+      <style jsx>{`
+        .dialogue-box {
+          background-color: ${animalData.color};
+        }
+        
+        .message-text {
+          margin: 0 0 15px 0;
+          line-height: 1.5;
+          font-family: var(--body-font);
+          font-size: 1.1rem;
+        }
+      `}</style>
     </div>
   );
 };
