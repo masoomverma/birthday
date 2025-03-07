@@ -1,4 +1,5 @@
 import { saveQuestionAnswer, saveFeedback } from './firebaseUtils';
+import { findQuestionByText, findQuestionById } from '../data/QuesToAsk';
 
 /**
  * Saves user choices to Firestore
@@ -21,21 +22,32 @@ export const saveChoice = async (type, question, data, saveToStorage = true) => 
       localStorage.setItem(key, JSON.stringify(saveData));
     }
     
-    // Extract question number if possible - with priority for "id:" format
+    // Extract question data using our mapping
     let questionId = null;
+    let questionText = question;
     
-    // First check for id field in the data object
+    // First try to get the question ID from data
     if (data.id !== undefined && data.id !== null) {
       questionId = data.id;
-      console.log(`Using data.id as questionId: ${questionId}`);
+      // Try to get the full question text
+      const matchedQuestion = findQuestionById(questionId);
+      if (matchedQuestion) {
+        questionText = matchedQuestion.question;
+      }
+      console.log(`Using provided questionId: ${questionId}`);
     }
-    // Then check for questionId field
-    else if (data.questionId !== undefined && data.questionId !== null) {
-      questionId = data.questionId;
-      console.log(`Using data.questionId: ${questionId}`);
-    } 
-    // Look for "id:" pattern in any string fields
-    else {
+    // Try to match by question text
+    else if (question) {
+      const matchedQuestion = findQuestionByText(question);
+      if (matchedQuestion) {
+        questionId = matchedQuestion.id;
+        questionText = matchedQuestion.question; // Use the exact question text from our map
+        console.log(`Matched question by text: ${questionId}`);
+      }
+    }
+    
+    // If we still don't have an ID, use the legacy extraction methods
+    if (!questionId) {
       // Check the question string for "id: X" pattern
       if (question && typeof question === 'string') {
         const idMatch = question.match(/id:\s*(\d+)/i);
@@ -71,58 +83,95 @@ export const saveChoice = async (type, question, data, saveToStorage = true) => 
           console.log(`Extracted number from question: ${questionId}`);
         }
       }
+      
+      // If after all attempts we still don't have an ID, generate one
+      if (!questionId) {
+        questionId = `q${Date.now().toString().substr(-4)}`;
+        console.log(`Generated questionId: ${questionId}`);
+      }
     }
     
-    console.log(`Final questionId: ${questionId} for question: "${question?.substring(0, 30)}..."`);
+    console.log(`Final questionId: ${questionId}, question: "${questionText}"`);
     
     // Save to Firebase based on the type
     if (type === 'ques') {
       // For regular questions with answers
       if (data.selectedAnswer !== undefined) {
         console.log(`Saving regular answer: "${data.selectedAnswer}"`);
+        
+        // Update this section to also save followUpResponse if it exists
+        const followUpResponse = data.followUpResponse || null;
+        
         await saveQuestionAnswer(
-          question,
+          questionText, // Use the matched question text
           data.selectedAnswer, 
           data.followUpQuestion || null, 
-          null,
+          followUpResponse,
           questionId
         );
       }
       // For follow-up responses (only save when user actually provides a follow-up)
-      else if (data.response !== undefined && data.followUpQuestion !== undefined) {
-        // Get the original answer - use the exact value provided
-        const originalAnswer = data.originalAnswer || data.selectedAnswer || "No selection recorded";
+      else if (data.followUpResponse !== undefined && data.followUpQuestion !== undefined) {
+        // Get the original question and answer
+        let originalQuestion = data.originalQuestion || question;
+        let originalAnswer = data.originalAnswer || data.selectedOption;
         
-        console.log(`Saving follow-up response with original answer: "${originalAnswer}"`);
-        console.log(`Follow-up question: "${data.followUpQuestion}"`);
-        console.log(`Follow-up answer: "${data.response}"`);
+        // Try to find the original question using the questionId
+        if (questionId) {
+          const matchedQuestion = findQuestionById(questionId);
+          if (matchedQuestion) {
+            originalQuestion = matchedQuestion.question;
+            
+            // If we don't have originalAnswer but have originalOption, use that
+            if (!originalAnswer && data.originalOption) {
+              originalAnswer = data.originalOption;
+            }
+          }
+        }
         
+        // If still no original answer, try various sources
+        if (!originalAnswer) {
+          originalAnswer = data.selectedAnswer || data.option || data.selection || "No selection recorded";
+          console.warn(`Had to use fallback for original answer: ${originalAnswer}`);
+        }
+        
+        console.log(`Saving follow-up response: 
+          Original question: "${originalQuestion}"
+          Original answer: "${originalAnswer}"
+          Follow-up question: "${data.followUpQuestion}"
+          Follow-up answer: "${data.followUpResponse}"
+        `);
+        
+        // When saving a follow-up, store the original question and answer first
         await saveQuestionAnswer(
-          question,
-          originalAnswer, // Use exactly what was provided as originalAnswer
+          originalQuestion,
+          originalAnswer,
           data.followUpQuestion,
-          data.response,
+          data.followUpResponse, // Use followUpResponse instead of response
           questionId
         );
       }
       // For skipped follow-up questions
       else if (data.skipped === true && data.followUpQuestion !== undefined) {
-        // Get the original answer - use exactly what was provided
-        const originalAnswer = data.originalAnswer || data.selectedAnswer || "No selection recorded";
+        // Get the original answer
+        const originalAnswer = data.originalAnswer || data.selectedAnswer;
+        
+        if (!originalAnswer) {
+          console.error("Missing original answer for skipped follow-up");
+        }
         
         console.log(`Saving skipped follow-up with original answer: "${originalAnswer}"`);
         
         // Force save with explicit parameters
         await saveSkippedFollowUp(
-          question,
-          originalAnswer, // Pass the original answer exactly as provided
+          questionText, // Use the matched question text
+          originalAnswer, // Original answer
           data.followUpQuestion,
           questionId
         );
       }
     } else if (type === 'feedback') {
       // For feedback type, only call the dedicated saveFeedback function
-      // The saveChoice call in Feedback.js will handle the storage in the choices collection
       await saveFeedback(data.message);
     }
     
@@ -141,12 +190,11 @@ async function saveSkippedFollowUp(question, originalAnswer, followUpQuestion, q
   console.log("EXPLICITLY SAVING SKIPPED FOLLOW-UP");
   
   try {
-    // Use direct Firebase call to ensure data is saved
     await saveQuestionAnswer(
       question,
-      originalAnswer || "No selection recorded", // Pass the original answer directly
+      originalAnswer || "Option not recorded", // Original answer or fallback
       followUpQuestion,
-      "I'd rather not 🚫", // Using stop sign emoji
+      "I'd rather not 🚫",
       questionId
     );
     console.log("SKIPPED FOLLOW-UP SAVED SUCCESSFULLY");

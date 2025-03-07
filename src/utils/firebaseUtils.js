@@ -13,23 +13,14 @@ import { db } from '../firebaseConfig';
  */
 export const saveQuestionAnswer = async (question, answer, followUpQuestion = null, followUpAnswer = null, questionId = null) => {
   try {
-    // Ensure question ID is never null or undefined
-    const finalQuestionId = questionId || `q${Date.now().toString().substr(-4)}`;
-    
-    // Log the data being saved to help diagnose issues
-    console.log(`Saving answer to Firestore:`, {
-      question,
-      answer, 
-      followUpQuestion,
-      followUpAnswer,
-      questionId: finalQuestionId
-    });
+    // Ensure questionId is in the right format and never null
+    const finalQuestionId = questionId ? questionId.toString() : `q${Date.now().toString().substr(-4)}`;
     
     // Create a data object with fields in the specific order requested
     const data = {
-      questionId: finalQuestionId,  // Store the question number/ID
-      
-      answer: answer,  // Store the selected option
+      questionId: finalQuestionId,
+      question: question || "Unknown question", // Store full question text
+      answer: answer || "No answer provided", // Store the selected option
       timestamp: serverTimestamp()
     };
 
@@ -42,6 +33,8 @@ export const saveQuestionAnswer = async (question, answer, followUpQuestion = nu
       data.followUpAnswer = followUpAnswer;
     }
 
+    console.log("Saving to Firestore:", data);
+    
     // Save to Firestore collection "choices"
     await addDoc(collection(db, "choices"), data);
     return true;
