@@ -20,10 +20,10 @@ const Feedback = () => {
         message: message,
       }, true);
       
-      // Navigate directly to surprise page without showing storage message
+      // Navigate directly to surprise page - decreased delay from 1000ms to 400ms
       setTimeout(() => {
         navigate('/surprise');
-      }, 1000); // Brief delay before navigating for better user experience
+      }, 400);
     } catch (error) {
       console.error("Error saving feedback:", error);
       navigate('/surprise');
@@ -41,10 +41,10 @@ const Feedback = () => {
         message: "No feedback provided",
       }, true);
       
-      // Navigate after a brief delay
+      // Navigate after a brief delay - keeping this at 300ms since it's already short
       setTimeout(() => {
         navigate('/surprise');
-      }, 500);
+      }, 300);
     } catch (error) {
       console.error("Error saving skip feedback:", error);
       navigate('/surprise');

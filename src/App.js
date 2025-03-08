@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import { AuthProvider, useAuth } from './auth/AuthContext';
-import Login from './auth/login'; // Fixed case sensitivity in path
+import Login from './auth/login'; 
 
 // Import pages
 import Surprise from './pages/Surprise';
@@ -65,11 +65,9 @@ const ViewportContainer = ({ children }) => {
 // A protected route component with path tracking
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
-  const location = useLocation();
   
   if (!isAuthenticated) {
     // Redirect to login if not authenticated
-    // No need to save path as we'll always redirect to ThankYou after login
     return <Navigate to="/login" replace />;
   }
   
@@ -105,11 +103,7 @@ function App() {
           <Routes>
             {/* Make login the default route */}
             <Route path="/" element={<Navigate to="/login" replace />} />
-            <Route path="/login" element={
-              <ViewportContainer>
-                <Login />
-              </ViewportContainer>
-            } />
+            <Route path="/login" element={<Login />} />
             
             {/* Protected Routes */}
             <Route path="/ThankYou" element={

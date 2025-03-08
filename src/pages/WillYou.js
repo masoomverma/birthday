@@ -23,10 +23,9 @@ const WillYou = () => {
       setIsSaving(false);
     }
     
-    // Delay to allow user to see their choice
     setTimeout(() => {
       navigate('/memories');
-    }, 2000);
+    }, 500);
   };
 
   return (
