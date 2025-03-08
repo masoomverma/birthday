@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { useNavigate } from 'react-router-dom';
 import { questions } from '../data/QuesToAsk';
 import DialogueBox from '../components/DialogueBox';
@@ -6,11 +7,13 @@ import QuestionDisplay from '../components/QuestionDisplay';
 import SummaryView from '../components/SummaryView';
 
 const Ques = () => {
+  // eslint-disable-next-line no-unused-vars
   const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [completedQuestions, setCompletedQuestions] = useState([]);
   const [showSummary, setShowSummary] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [showingFollowUp, setShowingFollowUp] = useState(false);
   
   // Set initial question
@@ -102,42 +105,65 @@ const Ques = () => {
     setShowingFollowUp(isVisible);
   };
   
+  // Styles for the component with improved responsive design
+  const styles = {
+    title: {
+      textAlign: 'center',
+      marginBottom: '12px',
+      color: '#333'
+    },
+    progressBar: {
+      width: '100%',
+      height: '8px',
+      backgroundColor: '#eee',
+      borderRadius: '5px',
+      marginTop: '15px',
+      marginBottom: '10px'
+    },
+    progressBarFill: {
+      width: `${(questionIndex / questions.length) * 100}%`,
+      height: '100%',
+      backgroundColor: '#ff6b6b',
+      borderRadius: '5px',
+      transition: 'width 0.5s'
+    },
+    questionDisplayWrapper: {
+      padding: 0,
+      margin: '10px auto',
+      width: '100%',
+      maxWidth: window.innerWidth <= 768 ? '100%' : '750px',
+      display: 'flex',
+      justifyContent: 'center'
+    }
+  };
+  
   if (!currentQuestion && !showSummary) return <div className="glass-container"><p>Loading questions...</p></div>;
 
   return (
     <div className="glass-container">
       {!showSummary ? (
         <>
-          <h1 className="title">Question {questionIndex + 1}/{questions.length}</h1>
+          <h1 className="title" style={styles.title}>Question {questionIndex + 1}/{questions.length}</h1>
           
           <DialogueBox 
             animal={questionIndex % 2 === 0 ? "cat" : "fox"} 
             message={currentQuestion.question}
           />
           
-          <QuestionDisplay 
-            questionId={currentQuestion.id}
-            onAnswer={handleQuestionAnswered}
-            previousAnswer={getPreviousAnswer()}
-            onFollowUpShown={handleFollowUpShown}
-            onNavigate={handleNavigation}
-          />
+          {/* Add more compact styling to the question display section */}
+          <div className="question-display-wrapper" style={styles.questionDisplayWrapper}>
+            <QuestionDisplay 
+              questionId={currentQuestion.id}
+              onAnswer={handleQuestionAnswered}
+              previousAnswer={getPreviousAnswer()}
+              onFollowUpShown={handleFollowUpShown}
+              onNavigate={handleNavigation}
+            />
+          </div>
           
           {/* Progress bar */}
-          <div className="progress-bar" style={{
-            width: '100%',
-            height: '8px',
-            backgroundColor: '#eee',
-            borderRadius: '5px',
-            marginTop: '15px'
-          }}>
-            <div style={{
-              width: `${(questionIndex / questions.length) * 100}%`,
-              height: '100%',
-              backgroundColor: '#ff6b6b',
-              borderRadius: '5px',
-              transition: 'width 0.5s'
-            }}></div>
+          <div className="progress-bar" style={styles.progressBar}>
+            <div style={styles.progressBarFill}></div>
           </div>
         </>
       ) : (
@@ -146,18 +172,6 @@ const Ques = () => {
           onNavigateToQuestion={handleNavigateToQuestion}
         />
       )}
-      
-      <style jsx>{`
-        .title {
-          text-align: center;
-          margin-bottom: 20px;
-          color: #333;
-        }
-        
-        .progress-bar {
-          margin-bottom: 10px;
-        }
-      `}</style>
     </div>
   );
 };

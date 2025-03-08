@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const animals = {
   cat: {
@@ -45,6 +45,17 @@ const animals = {
 
 const DialogueBox = ({ animal = 'bunny', message, children }) => {
   const animalData = animals[animal] || animals.bunny;
+  const [expanded, setExpanded] = useState(false);
+  
+  // Check if message is too long, different thresholds for mobile/desktop
+  const isMobile = window.innerWidth <= 1024;
+  const messageLengthThreshold = isMobile ? 120 : 200;
+  const isMessageLong = message && message.length > messageLengthThreshold;
+  
+  // Show full message if expanded, otherwise show truncated version
+  const displayMessage = (isMessageLong && !expanded) ? 
+    `${message.substring(0, messageLengthThreshold)}...` : 
+    message;
   
   return (
     <div className="dialogue-box">
@@ -54,8 +65,8 @@ const DialogueBox = ({ animal = 'bunny', message, children }) => {
           alt={`${animalData.name}`} 
           className="animal-icon"
           style={{
-            width: '80px',
-            height: '80px',
+            width: 'clamp(40px, 8vw, 80px)',
+            height: 'clamp(40px, 8vw, 80px)',
             borderRadius: '50%',
             objectFit: 'cover',
             border: '3px solid white',
@@ -79,7 +90,28 @@ const DialogueBox = ({ animal = 'bunny', message, children }) => {
       </div>
       
       <div className="message-container">
-        <p className="message-text">{message}</p>
+        <p className="message-text">{displayMessage}</p>
+        
+        {/* Expandable message for both desktop and mobile */}
+        {isMessageLong && (
+          <button 
+            className="expand-btn"
+            onClick={() => setExpanded(!expanded)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#ff6b6b',
+              fontSize: '0.8rem',
+              cursor: 'pointer',
+              padding: '0',
+              marginTop: '-10px',
+              marginBottom: '10px'
+            }}
+          >
+            {expanded ? 'Show less' : 'Read more...'}
+          </button>
+        )}
+        
         {children && <div className="message-actions">{children}</div>}
       </div>
       
@@ -89,10 +121,10 @@ const DialogueBox = ({ animal = 'bunny', message, children }) => {
         }
         
         .message-text {
-          margin: 0 0 15px 0;
-          line-height: 1.5;
+          margin: 0 0 10px 0;
+          line-height: 1.4;
           font-family: var(--body-font);
-          font-size: 1.1rem;
+          font-size: ${isMobile ? 'clamp(0.9rem, 2vw, 1.1rem)' : '1.1rem'};
         }
       `}</style>
     </div>

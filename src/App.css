@@ -1,5 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Pacifico&display=swap');
 
+:root {
+  --primary-color: #ff6b9e;
+  --secondary-color: #ff9ac7;
+  --accent-color: #7d4fc3;
+  --light-text: #777;
+  --heading-font: 'Pacifico', cursive;
+  --subtitle-font: 'Quicksand', sans-serif;
+}
+
+/* Chrome-specific optimizations */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+}
+
 /* ===== Base Styles ===== */
 body {
   margin: 0;
@@ -10,6 +27,8 @@ body {
   animation: gradientBG 15s ease infinite;
   min-height: 100vh;
   overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
 }
 
 @keyframes gradientBG {
@@ -25,6 +44,12 @@ body {
   justify-content: center;
   min-height: 100vh;
   position: relative;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  perspective: 1000;
 }
 
 /* Floating confetti background - removed direct image reference */
@@ -46,32 +71,70 @@ body {
 }
 
 /* ===== Container Styles ===== */
+/* Consolidated Glass Container Styles - Single Source of Truth */
 .glass-container {
   background: rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-radius: 20px;
-  padding: 35px;
+  padding: 25px;
   box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  width: 85%;
-  max-width: 900px;
-  margin: 20px auto;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 0 0;
   transform: translateY(20px);
   opacity: 0;
   animation: fadeInUp 1s ease-out forwards;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  min-height: 200px;
+}
+
+/* Device-specific glass container styles */
+.desktop-view .glass-container {
+  max-height: 60rem; /* Don't restrict height on desktop */
+  overflow-y: auto;
+  padding: 100px;
+  margin: 0 auto 0 0;
+}
+
+.mobile-view .glass-container {
+  max-height: 94vh;
+  overflow-y: auto;
+  padding: clamp(18px, 3.5vw, 30px);
+  margin: 10px auto 10px 0;
+}
+
+/* Prevent container shrinking when options appear */
+.glass-container.has-options {
+  height: auto !important;
+  min-height: 70vh;
+}
+
+/* Fix container height for question pages */
+.question-display-wrapper {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.options-container {
+  margin-bottom: 20px;
 }
 
 /* ===== Typography ===== */
 .title {
   font-family: 'Pacifico', cursive;
-  font-size: 2.8rem;
+  font-size: clamp(1.5rem, 5vw, 2.8rem);
   background: linear-gradient(90deg, #ff6b6b, #ff59b4);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: clamp(10px, 2vh, 20px);
   letter-spacing: 1px;
   text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
   position: relative;
@@ -92,13 +155,13 @@ body {
   background: linear-gradient(90deg, #ff9eb5, #ff6b6b);
   color: white;
   border: none;
-  padding: 14px 28px;
+  padding: clamp(8px, 3vw, 14px) clamp(15px, 5vw, 28px);
   border-radius: 50px;
-  font-size: 1.1rem;
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin: 10px;
+  margin: clamp(5px, 1vh, 10px);
   position: relative;
   overflow: hidden;
   box-shadow: 0 6px 15px rgba(255, 107, 107, 0.3);
@@ -137,8 +200,8 @@ body {
 /* ===== Dialogue Box Styles ===== */
 .dialogue-box {
   border-radius: 20px;
-  padding: 25px;
-  margin: 25px 0;
+  padding: clamp(12px, 3vh, 25px);
+  margin: clamp(10px, 2vh, 25px) 0;
   position: relative;
   background: rgba(255, 255, 255, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.5);
@@ -174,8 +237,8 @@ body {
 }
 
 .animal-icon {
-  width: 80px;
-  height: 80px;
+  width: clamp(40px, 8vw, 80px);
+  height: clamp(40px, 8vw, 80px);
   border-radius: 50%;
   margin-right: 15px;
   transition: transform 0.3s;
@@ -188,8 +251,8 @@ body {
 /* ===== Memory Gallery Styles ===== */
 .memories-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(auto-fill, minmax(clamp(120px, 25vw, 250px), 1fr));
+  gap: clamp(10px, 2vw, 25px);
   margin-top: 30px;
 }
 
@@ -212,7 +275,7 @@ body {
 
 .memory-img, .memory-video {
   width: 100%;
-  height: 200px;
+  height: clamp(120px, 20vh, 200px);
   object-fit: cover;
   transition: filter 0.3s;
 }
@@ -239,7 +302,7 @@ body {
 /* ===== Form Elements ===== */
 input, textarea, select {
   width: 100%;
-  padding: 12px 15px;
+  padding: clamp(8px, 2vh, 12px) clamp(10px, 3vw, 15px);
   margin: 8px 0;
   border: 2px solid rgba(255, 255, 255, 0.5);
   border-radius: 10px;
@@ -322,10 +385,6 @@ label {
   100% { transform: translateY(0px) rotate(0deg); }
 }
 
-.floating {
-  animation: float 4s ease-in-out infinite;
-}
-
 /* Staggered animation for memories */
 .memories-grid > div:nth-child(1) { animation-delay: 0.1s; }
 .memories-grid > div:nth-child(2) { animation-delay: 0.2s; }
@@ -337,7 +396,7 @@ label {
 /* ===== Responsive Styles ===== */
 @media (max-width: 768px) {
   .glass-container {
-    width: 90%;
+    width: 90%;  /* Increased from 90% */
     padding: 25px;
   }
 
@@ -362,6 +421,34 @@ label {
   .animal-icon {
     width: 60px;
     height: 60px;
+  }
+}
+
+/* Enhanced responsive styles for Chrome */
+@media screen and (max-width: 768px) {
+  .glass-container {
+    padding: 20px 15px;  /* Increased */
+  }
+  
+  .btn {
+    text-align: left;
+    padding: 10px 20px;
+    font-size: 0.95rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .title {
+    font-size: 1.8rem;
+  }
+  
+  .dialogue-box {
+    padding: 15px;
+  }
+  
+  .animal-icon {
+    width: 50px;
+    height: 50px;
   }
 }
 
@@ -442,4 +529,258 @@ label {
   right: 5%;
   background: linear-gradient(135deg, #a5d6a7, #4caf50);
   animation: float 6s ease-in-out infinite 0.5s;
+}
+
+/* Add viewport fitting optimization */
+.viewport-container {
+  height: 100vh;
+  width: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Add content scaling utility classes */
+.scale-content {
+  transform-origin: top center;
+  transition: transform 0.3s ease;
+}
+
+.scale-content-sm {
+  transform: scale(0.9);
+}
+
+.scale-content-xs {
+  transform: scale(0.8);
+}
+
+/* Enhanced responsive styles for better viewport fitting */
+@media screen and (max-height: 700px) {
+  .glass-container {
+    padding: 15px;
+    max-height: 95vh;
+  }
+  
+  .title {
+    margin-bottom: 10px;
+  }
+  
+  .dialogue-box {
+    padding: 15px;
+    margin: 10px 0;
+  }
+  
+  .btn {
+    padding: 8px 15px;
+    margin: 5px;
+  }
+}
+
+@media screen and (max-height: 600px) {
+  body {
+    font-size: 14px;
+  }
+  
+  .glass-container {
+    width: 95%;
+  }
+  
+  .scale-content {
+    transform: scale(0.85);
+  }
+}
+
+/* Viewport container with device-specific optimizations */
+.viewport-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.viewport-container.desktop-view {
+  overflow: auto;
+  padding: 20px 0;
+}
+
+.viewport-container.mobile-view {
+  overflow: hidden;
+}
+
+/* Glass container optimization */
+.glass-container {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 0 0;
+  transform: translateY(20px);
+  opacity: 0;
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+/* Device-specific glass container styles */
+.desktop-view .glass-container {
+  max-height: 60rem; /* Don't restrict height on desktop */
+  overflow-y: visible;
+  padding: 100px;  /* Increased from 35px */
+  margin: 0 auto 0 0; /* Added to ensure consistency */
+}
+
+.mobile-view .glass-container {
+  max-height: 94vh;  /* Increased from 92vh */
+  overflow-y: auto;
+  padding: clamp(18px, 3.5vw, 30px); /* Increased padding */
+  margin: 10px auto 10px 0; /* Changed from "10px auto" */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Content scaling utilities with improved laptop handling */
+.scale-content {
+  transform-origin: top center;
+  transition: transform 0.3s ease;
+}
+
+/* Only apply scaling on mobile */
+.mobile-view .scale-content-sm {
+  transform: scale(0.9);
+}
+
+.mobile-view .scale-content-xs {
+  transform: scale(0.8);
+}
+
+/* For desktop, use milder scaling if needed */
+.desktop-view .scale-content-sm {
+  transform: scale(0.95);
+}
+
+/* Typography adjustments */
+.title {
+  font-family: 'Pacifico', cursive;
+  font-size: 2.5rem;
+  background: linear-gradient(90deg, #ff6b6b, #ff59b4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-align: center;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+  position: relative;
+  z-index: 1;
+}
+
+/* Device-specific typography */
+.mobile-view .title {
+  font-size: clamp(1.5rem, 5vw, 2.2rem);
+  margin-bottom: clamp(10px, 2vh, 20px);
+}
+
+/* Device-specific responsive styles */
+@media screen and (max-width: 768px) {
+  /* ...existing media query content... */
+}
+
+/* Modified height-based media queries to be less aggressive */
+@media screen and (max-height: 700px) {
+  .desktop-view .glass-container {
+    padding: 25px;  /* Increased from 25px */
+  }
+  
+  .mobile-view .glass-container {
+    padding: 15px;
+    max-height: 95vh;
+  }
+  
+  .title {
+    margin-bottom: 15px;
+  }
+}
+
+/* Enhanced responsive styles for question options */
+.option-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.option-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.option-card:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Additional responsive adjustments for question options */
+@media screen and (max-height: 700px) {
+  .options-container {
+    gap: 6px !important;
+  }
+  
+  .option-card {
+    min-height: 30px !important;
+    padding: 5px 10px !important;
+  }
+}
+
+/* Enhanced styling for question options */
+.option-card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.option-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.option-card:active {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+.option-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.1), transparent);
+  pointer-events: none;
+}
+
+/* Enhanced hover effects for option cards */
+@media (hover: hover) {
+  .option-card:hover, div[style*="optionCard"]:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    background: linear-gradient(90deg, rgba(255,107,107,0.9), rgba(255,143,177,0.9));
+  }
+}
+
+/* Ensure options are always properly sized on narrow screens */
+@media screen and (max-width: 380px) {
+  .option-card, div[style*="optionCard"] {
+    width: 95% !important;
+    padding: 10px !important;
+  }
+}
+
+/* Ensure proper two-column layout on web view */
+@media screen and (min-width: 769px) {
+  .options-container, div[style*="optionsContainer"] {
+    grid-template-columns: 1fr 1fr !important;
+  }
 }

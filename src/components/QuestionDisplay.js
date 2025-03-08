@@ -17,6 +17,208 @@ const safeString = (value) => {
   }
 };
 
+// Component styles
+const styles = {
+  questionContainer: {
+    width: '100%',
+    margin: '10px 0',
+    position: 'relative'
+  },
+  optionsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '12px',
+    margin: '15px auto',
+    width: '100%',
+    maxWidth: '600px'
+  },
+  optionCard: {
+    background: 'linear-gradient(90deg, rgba(255,107,107,0.8) 0%, rgba(255,143,177,0.8) 100%)',
+    color: 'white',
+    padding: '12px 15px',
+    borderRadius: '20px',
+    cursor: 'pointer',
+    textAlign: 'center',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    transition: 'all 0.2s ease',
+    width: '85%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: '40px',
+    border: '1px solid rgba(255, 255, 255, 0.3)'
+  },
+  optionContent: {
+    fontSize: '1rem',
+    fontWeight: 600,
+    padding: '2px 4px',
+    wordBreak: 'break-word'
+  },
+  // ...additional styles defined below...
+  confirmationDialog: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    background: 'white',
+    padding: '15px',
+    borderRadius: '10px',
+    boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
+    zIndex: 10,
+    textAlign: 'center'
+  },
+  buttonRow: {
+    display: 'flex',
+    gap: '10px',
+    justifyContent: 'center',
+    marginTop: '10px'
+  },
+  previousAnswer: {
+    background: 'linear-gradient(90deg, rgba(255,107,107,0.15) 0%, rgba(255,143,177,0.15) 100%)',
+    padding: '15px',
+    borderRadius: '12px',
+    textAlign: 'center',
+    margin: '15px auto',
+    border: '1px solid rgba(255,107,107,0.3)',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+  },
+  previousResponse: {
+    margin: '15px 0',
+    fontStyle: 'italic',
+    background: 'rgba(255,255,255,0.5)',
+    padding: '10px',
+    borderRadius: '8px'
+  },
+  followUpQuestion: {
+    margin: '0 0 8px 0',
+    fontWeight: 500,
+    color: '#666'
+  },
+  followUpAnswer: {
+    margin: 0,
+    fontWeight: 400,
+    color: '#333'
+  },
+  changeBtn: {
+    background: 'linear-gradient(90deg, rgba(255,107,107,0.8), rgba(255,143,177,0.8))',
+    border: 'none',
+    color: 'white',
+    padding: '12px 20px',
+    borderRadius: '20px',
+    cursor: 'pointer',
+    marginTop: '10px',
+    fontSize: '0.9rem',
+    transition: 'all 0.2s ease'
+  },
+  consentContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '15px',
+    margin: '15px 0',
+    textAlign: 'center'
+  },
+  consentText: {
+    fontSize: '1.1rem',
+    fontWeight: 500,
+    margin: '10px 0'
+  },
+  confirmation: {
+    textAlign: 'center',
+    padding: '20px'
+  },
+  navigationSection: {
+    marginTop: '20px',
+    borderTop: '1px solid #eee',
+    paddingTop: '15px'
+  },
+  navigationControls: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '15px',
+    margin: '0 auto'
+  },
+  navBtn: {
+    background: 'linear-gradient(90deg, #778ca3, #a5b1c2)',
+    border: 'none',
+    color: 'white',
+    padding: '14px 20px',
+    borderRadius: '20px',
+    cursor: 'pointer',
+    fontSize: '0.9rem',
+    transition: 'all 0.2s ease',
+    minWidth: '90px'
+  },
+  nextBtn: {
+    background: 'linear-gradient(90deg, rgba(255,107,107,1), rgba(255,143,177,1))'
+  },
+  optionsSection: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '15px'
+  },
+  followUpContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '15px',
+    marginTop: '12px',
+    justifyContent: 'center'
+  },
+  followUpTextarea: {
+    width: '100%',
+    padding: '10px',
+    borderRadius: '10px',
+    border: '1px solid #ddd',
+    minHeight: '100px'
+  },
+  buttonGroup: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '10px',
+    marginTop: '10px'
+  }
+};
+
+// Media query helper for responsive styling with strict mobile/web layouts
+const getResponsiveStyle = (baseStyle) => {
+  const isMobile = window.innerWidth <= 768;
+  let responsiveStyle = {...baseStyle};
+  
+  if (isMobile) {
+    // Case 1: Mobile View - Single column layout
+    responsiveStyle.optionsContainer = {
+      ...responsiveStyle.optionsContainer,
+      flexDirection: 'column',
+      alignItems: 'center',
+      width: '100%'
+    };
+    responsiveStyle.optionCard = {
+      ...responsiveStyle.optionCard,
+      width: '90%',
+      maxWidth: '320px',
+      margin: '6px auto'
+    };
+  } else {
+    // Case 2: Web View - Two column layout
+    responsiveStyle.optionsContainer = {
+      ...responsiveStyle.optionsContainer,
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+      gap: '15px'
+    };
+    responsiveStyle.optionCard = {
+      ...responsiveStyle.optionCard,
+      width: '45%',
+      maxWidth: '300px',
+      margin: '0',
+      minHeight: '45px'
+    };
+  }
+  
+  return responsiveStyle;
+};
+
 const QuestionDisplay = ({ questionId, onAnswer, previousAnswer = null, onFollowUpShown, onNavigate }) => {
   // State management
   const [question, setQuestion] = useState(null);
@@ -27,6 +229,20 @@ const QuestionDisplay = ({ questionId, onAnswer, previousAnswer = null, onFollow
   const [showChangeConfirmation, setShowChangeConfirmation] = useState(false);
   const [changeEnabled, setChangeEnabled] = useState(false);
   const [followUpQuestion, setFollowUpQuestion] = useState('');
+  const [responsiveStyles, setResponsiveStyles] = useState(getResponsiveStyle(styles));
+
+  // Update responsive styles on window resize and initial load
+  useEffect(() => {
+    const handleResize = () => {
+      setResponsiveStyles(getResponsiveStyle(styles));
+    };
+    
+    handleResize(); // Call immediately to set initial styles
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   // Helper to check if this is the first question
   const isFirstQuestion = () => {
@@ -73,8 +289,7 @@ const QuestionDisplay = ({ questionId, onAnswer, previousAnswer = null, onFollow
   }, [showFollowUp, askingConsent, onFollowUpShown]);
 
   // HANDLERS
-
-  // Handle option selection
+  // ...existing code for handlers...
   const handleOptionSelect = async (option) => {
     if (!changeEnabled) return;
     
@@ -161,9 +376,8 @@ const QuestionDisplay = ({ questionId, onAnswer, previousAnswer = null, onFollow
   const cancelChange = () => {
     setShowChangeConfirmation(false);
   };
-  
+
   // RENDER HELPERS
-  
   // Determine current render state
   const getRenderState = () => {
     if (previousAnswer && selectedOption && !changeEnabled) {
@@ -184,16 +398,15 @@ const QuestionDisplay = ({ questionId, onAnswer, previousAnswer = null, onFollow
   if (!question) return <div>Loading question...</div>;
   
   const renderState = getRenderState();
-  const isPreviouslyAnswered = previousAnswer && !changeEnabled;
 
   // RENDER
   return (
-    <div className="question-container">
+    <div style={responsiveStyles.questionContainer}>
       {/* Change confirmation dialog */}
       {showChangeConfirmation && (
-        <div className="confirmation-dialog">
+        <div style={responsiveStyles.confirmationDialog}>
           <p>Are you sure you want to change your answer?</p>
-          <div className="button-row">
+          <div style={responsiveStyles.buttonRow}>
             <button className="btn" onClick={confirmChange}>Yes, change it</button>
             <button className="btn" onClick={cancelChange}>No, keep it</button>
           </div>
@@ -202,19 +415,19 @@ const QuestionDisplay = ({ questionId, onAnswer, previousAnswer = null, onFollow
       
       {/* Previous answer display */}
       {renderState === 'previous' && (
-        <div className="previous-answer">
+        <div style={responsiveStyles.previousAnswer}>
           <p>You selected: <strong>{safeString(selectedOption)}</strong></p>
           
           {previousAnswer.followUpResponse && (
-            <div className="previous-response">
-              <p className="follow-up-question">{safeString(followUpQuestion)}</p>
-              <p className="follow-up-answer">"{safeString(previousAnswer.followUpResponse)}"</p>
+            <div style={responsiveStyles.previousResponse}>
+              <p style={responsiveStyles.followUpQuestion}>{safeString(followUpQuestion)}</p>
+              <p style={responsiveStyles.followUpAnswer}>"{safeString(previousAnswer.followUpResponse)}"</p>
             </div>
           )}
           
-          <div className="button-row">
+          <div style={responsiveStyles.buttonRow}>
             <button 
-              className="change-btn"
+              style={responsiveStyles.changeBtn}
               onClick={handleChangeClick}
             >
               Change my answer
@@ -223,17 +436,17 @@ const QuestionDisplay = ({ questionId, onAnswer, previousAnswer = null, onFollow
         </div>
       )}
       
-      {/* Options selection - REMOVE NAVIGATION */}
+      {/* Options selection */}
       {renderState === 'options' && (
-        <div className="options-section">
-          <div className="options-container">
+        <div style={responsiveStyles.optionsSection}>
+          <div style={responsiveStyles.optionsContainer}>
             {question.options.map((option) => (
               <div 
                 key={safeString(option)}
-                className="option-card"
+                style={{...responsiveStyles.optionCard}}
                 onClick={() => handleOptionSelect(option)}
               >
-                <div className="option-content">
+                <div style={responsiveStyles.optionContent}>
                   <span>{safeString(option)}</span>
                 </div>
               </div>
@@ -242,18 +455,18 @@ const QuestionDisplay = ({ questionId, onAnswer, previousAnswer = null, onFollow
         </div>
       )}
       
-      {/* Follow-up consent - REMOVE NAVIGATION */}
+      {/* Follow-up consent */}
       {renderState === 'consent' && (
-        <div className="consent-container">
+        <div style={responsiveStyles.consentContainer}>
           <p className="selected-option">
             You selected: <strong>{safeString(selectedOption)}</strong>
           </p>
           
-          <p className="follow-up-question">{safeString(followUpQuestion)}</p>
+          <p style={responsiveStyles.followUpQuestion}>{safeString(followUpQuestion)}</p>
           
-          <div className="consent-text">Would you like to share more about this?</div>
+          <div style={responsiveStyles.consentText}>Would you like to share more about this?</div>
           
-          <div className="button-group">
+          <div style={responsiveStyles.buttonGroup}>
             <button 
               onClick={() => handleFollowUpConsent(true)}
               className="btn"
@@ -274,29 +487,27 @@ const QuestionDisplay = ({ questionId, onAnswer, previousAnswer = null, onFollow
               I'd rather not
             </button>
           </div>
-          
-          {/* Remove navigation controls that were here */}
         </div>
       )}
       
-      {/* Follow-up input - REMOVE NAVIGATION */}
+      {/* Follow-up input */}
       {renderState === 'followUp' && (
-        <div className="follow-up-container">
+        <div style={responsiveStyles.followUpContainer}>
           <p className="selected-option">
             You selected: <strong>{safeString(selectedOption)}</strong>
           </p>
           
-          <p className="follow-up-question">{safeString(followUpQuestion)}</p>
+          <p style={responsiveStyles.followUpQuestion}>{safeString(followUpQuestion)}</p>
           
           <textarea
             value={followUpResponse}
             onChange={(e) => setFollowUpResponse(e.target.value)}
             placeholder="Write your answer here..."
-            className="follow-up-textarea"
+            style={responsiveStyles.followUpTextarea}
             disabled={!changeEnabled}
           />
           
-          <div className="button-group">
+          <div style={responsiveStyles.buttonGroup}>
             <button 
               onClick={handleFollowUpSubmit}
               className="btn"
@@ -321,25 +532,23 @@ const QuestionDisplay = ({ questionId, onAnswer, previousAnswer = null, onFollow
               I'd rather not share
             </button>
           </div>
-          
-          {/* Remove navigation controls that were here */}
         </div>
       )}
       
-      {/* Confirmation - Remove the saved message */}
+      {/* Confirmation */}
       {renderState === 'confirmation' && (
-        <div className="confirmation">
-          {/* Remove the "Your answer has been saved!" message */}
+        <div style={responsiveStyles.confirmation}>
+          {/* Empty confirmation section */}
         </div>
       )}
       
-      {/* Add dedicated navigation section at the bottom - don't show during follow-up or consent */}
+      {/* Navigation section */}
       {onNavigate && renderState !== 'consent' && renderState !== 'followUp' && (
-        <div className="navigation-section">
-          <div className="navigation-controls">
+        <div style={responsiveStyles.navigationSection}>
+          <div style={responsiveStyles.navigationControls}>
             {!isFirstQuestion() && (
               <button 
-                className="nav-btn"
+                style={responsiveStyles.navBtn}
                 onClick={() => onNavigate('prev')}
               >
                 Previous
@@ -349,7 +558,7 @@ const QuestionDisplay = ({ questionId, onAnswer, previousAnswer = null, onFollow
             {/* Only show Next if previous answer exists or we're in confirmation state */}
             {(previousAnswer || renderState === 'confirmation') && (
               <button 
-                className="nav-btn next-btn"
+                style={{...responsiveStyles.navBtn, ...responsiveStyles.nextBtn}}
                 onClick={() => onNavigate('next')}
               >
                 Next
@@ -358,197 +567,6 @@ const QuestionDisplay = ({ questionId, onAnswer, previousAnswer = null, onFollow
           </div>
         </div>
       )}
-      
-      <style jsx>{`
-        .question-container {
-          width: 100%;
-          margin: 15px 0;
-          position: relative;
-        }
-        
-        .options-container {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 15px;
-          margin: 10px auto;
-          justify-content: center;
-          max-width: 1000px;
-        }
-        
-        .option-card {
-          background: linear-gradient(90deg, rgba(255,107,107,0.8) 0%, rgba(255,143,177,0.8) 100%);
-          color: white;
-          padding: 8px 12px;
-          border-radius: 25px;
-          cursor: pointer;
-          text-align: center;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-          transition: all 0.2s ease;
-          width: 20rem;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          min-height: 40px;
-          margin: 0 auto;
-        }
-        
-        .option-content {
-          font-size: 1.1rem;
-          font-weight: 500;
-        }
-        
-        .follow-up-container {
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-          gap: 15px;
-          margin-top: 12px;
-          justify-content: center;
-        }
-        
-        .confirmation-dialog {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          background: white;
-          padding: 15px;
-          border-radius: 10px;
-          box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-          z-index: 10;
-          text-align: center;
-        }
-        
-        .button-row {
-          display: flex;
-          gap: 10px;
-          justify-content: center;
-          margin-top: 10px;
-        }
-        
-        .previous-answer {
-          background: linear-gradient(90deg, rgba(255,107,107,0.15) 0%, rgba(255,143,177,0.15) 100%);
-          padding: 15px;
-          border-radius: 12px;
-          text-align: center;
-          margin: 15px auto;
-          border: 1px solid rgba(255,107,107,0.3);
-          box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        
-        .previous-response {
-          margin: 15px 0;
-          font-style: italic;
-          background: rgba(255,255,255,0.5);
-          padding: 10px;
-          border-radius: 8px;
-        }
-        
-        .follow-up-question {
-          margin: 0 0 8px 0;
-          font-weight: 500;
-          color: #666;
-        }
-        
-        .follow-up-answer {
-          margin: 0;
-          font-weight: 400;
-          color: #333;
-        }
-        
-        .change-btn {
-          background: linear-gradient(90deg, rgba(255,107,107,0.8), rgba(255,143,177,0.8));
-          border: none;
-          color: white;
-          padding: 12px 20px;
-          border-radius: 20px;
-          cursor: pointer;
-          margin-top: 10px;
-          font-size: 0.9rem;
-          transition: all 0.2s ease;
-        }
-        
-        .change-btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-          background: linear-gradient(90deg, rgba(255,107,107,1), rgba(255,143,177,1));
-        }
-        
-        .consent-container {
-          display: flex;
-          flex-direction: column;
-          gap: 15px;
-          margin: 15px 0;
-          text-align: center;
-        }
-        
-        .consent-text {
-          font-size: 1.1rem;
-          font-weight: 500;
-          margin: 10px 0;
-        }
-        
-        .confirmation {
-          text-align: center;
-          padding: 20px;
-        }
-        
-        .navigation-controls {
-          display: flex;
-          justify-content: center;
-          gap: 12px;
-          margin-top: 15px;
-          flex-wrap: wrap;
-        }
-        
-        .nav-btn {
-          background: linear-gradient(90deg, #778ca3, #a5b1c2);
-          border: none;
-          color: white;
-          padding: 14px 20px;
-          border-radius: 20px;
-          cursor: pointer;
-          font-size: 0.9rem;
-          transition: all 0.2s ease;
-          min-width: 90px;
-        }
-        
-        .next-btn {
-          background: linear-gradient(90deg, rgba(255,107,107,1), rgba(255,143,177,1));
-        }
-        
-        .nav-btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-        }
-        
-        .options-section {
-          display: flex;
-          flex-direction: column;
-          gap: 15px;
-        }
-        
-        .navigation-section {
-          margin-top: 20px;
-          border-top: 1px solid #eee;
-          padding-top: 15px;
-        }
-        
-        .navigation-controls {
-          display: flex;
-          justify-content: center;
-          gap: 15px;
-          margin: 0 auto;
-        }
-        
-        /* For mobile screens */
-        @media (max-width: 480px) {
-          .options-container {
-            grid-template-columns: 1fr;
-            gap: 10px;
-          }
-        }
-      `}</style>
     </div>
   );
 };
