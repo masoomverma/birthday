@@ -205,7 +205,7 @@ const Surprise = () => {
             boxShadow: '0 10px 30px rgba(255, 107, 107, 0.2)',
             animation: 'bounceIn 1s'
           }}>
-            <h2 style={{ color: '#ff6b6b' }}>Dear Masoom,</h2>
+            <h2 style={{ color: '#ff6b6b' }}>Dear User,</h2>
             <p style={{ fontSize: '1.2rem', lineHeight: '1.6', padding: '10px 20px' }}>
               "On this special day, I want you to know how much joy and happiness you bring to my journey.
               Keep smiling always, and may God bless you with everything you deserve.
