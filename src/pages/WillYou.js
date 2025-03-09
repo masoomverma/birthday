@@ -32,17 +32,6 @@ const WillYou = () => {
     <div className="glass-container">
       <h1 className="title">Will You?</h1>
       
-      <div style={{ textAlign: 'center', margin: '20px 0' }}>
-        <img 
-          src="/assets/cake.png"
-          alt="Birthday cake" 
-          style={{ width: '200px', maxWidth: '100%' }}
-          onError={(e) => {
-            e.target.src = 'https://via.placeholder.com/200?text=Cake';
-          }}
-        />
-      </div>
-      
       <DialogueBox 
         animal="bunny" 
         message="User, I hope your day is as special as you are! Quick question before we continue, is it okay if Masoom see your choices and answers on this little birthday journey?"

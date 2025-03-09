@@ -23,16 +23,16 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [lastPath, setLastPath] = useState('/');
 
-  // Check if user is already logged in (e.g., from localStorage)
+  // Check if user is already logged in (e.g., from sessionStorage)
   useEffect(() => {
     const checkAuthStatus = () => {
-      const savedUser = localStorage.getItem('user');
+      const savedUser = sessionStorage.getItem('user');
       if (savedUser) {
         setUser(JSON.parse(savedUser));
         setIsAuthenticated(true);
         
-        // Retrieve the last path from localStorage if available
-        const savedPath = localStorage.getItem('lastPath');
+        // Retrieve the last path from sessionStorage if available
+        const savedPath = sessionStorage.getItem('lastPath');
         if (savedPath) {
           setLastPath(savedPath);
         }
@@ -42,13 +42,12 @@ export const AuthProvider = ({ children }) => {
 
     checkAuthStatus();
   }, []);
-
-  // Save the last path the user visited
+  
   const saveLastPath = (path) => {
     // Don't save login path
     if (path !== '/login') {
       setLastPath(path);
-      localStorage.setItem('lastPath', path);
+      sessionStorage.setItem('lastPath', path);
     }
   };
 
@@ -74,8 +73,8 @@ export const AuthProvider = ({ children }) => {
             name: usernameOrPassword === defaultUsername ? 'Birthday User' : 'Birthday User',
           };
           
-          // Save to localStorage and state
-          localStorage.setItem('user', JSON.stringify(userData));
+          // Save to sessionStorage and state
+          sessionStorage.setItem('user', JSON.stringify(userData));
           setUser(userData);
           setIsAuthenticated(true);
           
@@ -95,7 +94,7 @@ export const AuthProvider = ({ children }) => {
             name: 'Birthday Guest',
           };
           
-          localStorage.setItem('user', JSON.stringify(userData));
+          sessionStorage.setItem('user', JSON.stringify(userData));
           setUser(userData);
           setIsAuthenticated(true);
           return true;
@@ -112,7 +111,7 @@ export const AuthProvider = ({ children }) => {
 
   // Logout function
   const logout = () => {
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('user');
     // Don't remove lastPath to enable returning after re-login
     setUser(null);
     setIsAuthenticated(false);
