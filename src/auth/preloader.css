@@ -1,0 +1,38 @@
+/* Preloader to ensure smooth container appearance */
+.square-container-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 450px;
+  width: 100%;
+  position: relative;
+  z-index: 5;
+  opacity: 0;
+  transition: opacity 0.3s ease-in;
+}
+
+.square-container-wrapper.loaded {
+  opacity: 1;
+}
+
+/* Optimize container appearance */
+@media screen and (max-width: 768px) {
+  .square-container {
+    min-height: 400px;
+    padding: 20px 15px;
+  }
+}
+
+/* Handle extreme low-end devices */
+@media screen and (max-width: 320px) {
+  .square-container {
+    min-height: 350px;
+  }
+}
+
+/* Make sure the form inputs don't cause layout shifts */
+.login-form input, 
+.login-form button {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}

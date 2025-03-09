@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import './login.css';
+import './preloader.css'; // Import preloader CSS
     
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -10,6 +11,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   
@@ -31,10 +33,30 @@ const Login = () => {
     }
   }, [isAuthenticated, navigate]);
 
+  // Optimize initial render
+  useEffect(() => {
+    // Delay setting loaded state to ensure DOM is fully rendered
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
+  
   // Apply hardware acceleration to animations
   useEffect(() => {
     // Add hardware acceleration to animated elements
     document.body.style.transform = 'translateZ(0)';
+    
+    // Apply to the square container directly to prevent flickering
+    const container = document.querySelector('.square-container');
+    if (container) {
+      container.style.willChange = 'transform, opacity';
+      container.style.transform = 'translateZ(0)';
+      container.style.webkitTransform = 'translateZ(0)';
+      container.style.backfaceVisibility = 'hidden';
+      container.style.webkitBackfaceVisibility = 'hidden';
+    }
     
     const balloons = document.querySelectorAll('.balloon');
     const confettis = document.querySelectorAll('.confetti');
@@ -44,7 +66,6 @@ const Login = () => {
       if (element) {
         element.style.willChange = 'transform';
         element.style.transform = 'translateZ(0)';
-        // Add additional vendor prefixes for better mobile support
         element.style.webkitTransform = 'translateZ(0)';
         element.style.webkitBackfaceVisibility = 'hidden';
       }
@@ -145,76 +166,71 @@ const Login = () => {
         <div className="confetti confetti-8"></div>
       </div>
       
-      <div className="square-container">
-        <h1 className="login-title">Birthday Journey</h1>
-        
-        <div className="gift-icon-container">
-          <img 
-            src="/assets/gift.png"
-            alt="Birthday Gift"
-            className="gift-icon"
-            onError={(e) => { e.target.src = 'https://via.placeholder.com/100?text=Gift'; }}
-          />
-        </div>
-        
-        <p className="login-message">
-          This special birthday journey is just for you!<br />
-          Please enter your credentials to continue.
-        </p>
-        
-        <form onSubmit={handleSubmit} className="login-form">
-          <div className="input-group">
-            <div className="input-field">
-              <label htmlFor="username">Username</label>
-              <input
-                id="username"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Enter your username"
-                required
-                autoFocus
-              />
-            </div>
-            
-            <div className="input-field">
-              <label htmlFor="password">Password</label>
-              <div className="password-input-container">
+      {/* Add a stable wrapper around the container */}
+      <div className={`square-container-wrapper ${isLoaded ? 'loaded' : ''}`} 
+           style={{position: 'relative', zIndex: 5}}>
+        <div className="square-container">
+          <h1 className="login-title">Birthday Journey 🎂</h1>
+          
+          <p className="login-message">
+            This special birthday journey is just for you!<br />
+            Please enter your credentials to continue.
+          </p>
+          
+          <form onSubmit={handleSubmit} className="login-form">
+            <div className="input-group">
+              <div className="input-field">
+                <label htmlFor="username">Username</label>
                 <input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
+                  id="username"
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Enter your username"
                   required
+                  autoFocus
                 />
-                <button 
-                  type="button"
-                  className="toggle-password"
-                  onClick={() => setShowPassword(prev => !prev)}
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                  tabIndex="-1"
-                >
-                  {showPassword ? "👁️" : "👁️‍🗨️"}
-                </button>
+              </div>
+              
+              <div className="input-field">
+                <label htmlFor="password">Password</label>
+                <div className="password-input-container">
+                  <input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter your password"
+                    required
+                  />
+                  <button 
+                    type="button"
+                    className="toggle-password"
+                    onClick={() => setShowPassword(prev => !prev)}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    tabIndex="-1"
+                  >
+                    {showPassword ? "👁️" : "👁️‍🗨️"}
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+            
+            {error && <p className="error-message">{error}</p>}
+            
+            <button 
+              type="submit" 
+              className="login-btn"
+              disabled={loading || !username.trim() || !password.trim()}
+            >
+              {loading ? 'Checking...' : 'Open Gift 🎁'}
+            </button>
+          </form>
           
-          {error && <p className="error-message">{error}</p>}
-          
-          <button 
-            type="submit" 
-            className="login-btn"
-            disabled={loading || !username.trim() || !password.trim()}
-          >
-            {loading ? 'Checking...' : 'Open Gift 🎁'}
-          </button>
-        </form>
-        
-        <p className="login-hint">
-          Check your messages for login details!
-        </p>
+          <p className="login-hint">
+            Check your messages for login details!
+          </p>
+        </div>
       </div>
     </div>
   );

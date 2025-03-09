@@ -13,6 +13,9 @@
   min-height: 100vh;
   height: auto;
   overflow-x: hidden;
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out forwards;
+  animation-delay: 0.1s; /* Small delay to ensure DOM is ready */
 }
 
 /* Birthday decorations */
@@ -214,6 +217,36 @@
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+
+  /* Ensure consistent dimensions to prevent layout shifts */
+  min-height: 450px; /* Set a minimum height */
+  max-width: 450px;
+  width: 90%;
+  margin: 0 auto;
+  padding: 30px 20px;
+  
+  /* Enhance hardware acceleration and rendering performance */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000;
+  will-change: transform, opacity;
+  
+  /* Add smooth transition instead of immediate change */
+  transition: opacity 0.3s ease;
+  
+  /* Make sure the container doesn't shift during animations */
+  position: relative;
+  z-index: 10;
+  
+  /* More stable background rendering */
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  
+  /* Ensure consistent border rendering */
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
 }
 
 .square-container:hover {
@@ -661,4 +694,15 @@ input:-webkit-autofill:focus {
     overflow: hidden;
     max-width: 100%;
   }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Reduce animation complexity for background elements */
+.birthday-decorations > div {
+  will-change: transform;
+  pointer-events: none; /* Prevent event handling which can cause repaints */
 }
