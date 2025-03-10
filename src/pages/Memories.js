@@ -51,6 +51,11 @@ const Memories = () => {
     navigate('/ques');
   };
   
+  // Determine if we're on Chrome mobile for specific styling
+  const isChromeMobile = /Chrome/i.test(navigator.userAgent) && 
+                         /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent) && 
+                         window.innerWidth <= 768;
+  
   // Render either image or video based on type
   const renderMedia = (memory) => {
     if (memory.type === 'image') {
@@ -83,34 +88,40 @@ const Memories = () => {
   };
   
   return (
-    <div className="glass-container">
-      <h1 className="title">Our Special Memories 💖</h1>
-      
-      <DialogueBox 
-        animal="bear" 
-        message="Here are Masoom's favorite moments with you, User! I hope they bring back wonderful memories."
-      />
-      
-      <div className="memories-grid">
-        {MEMORIES.map(memory => (
-          <div key={memory.id} className="memory-card">
-            {renderMedia(memory)}
-            <p style={{ 
-              textAlign: 'center', 
-              padding: '10px',
-              background: 'rgba(255,255,255,0.5)',
-              margin: '0' 
-            }}>
-              {memory.caption}
-            </p>
-          </div>
-        ))}
-      </div>
-      
-      <div style={{ textAlign: 'center', margin: '30px 0' }}>
-        <button className="btn" onClick={handleContinue}>
-          Few Questions
-        </button>
+    <div className="question-page"> {/* Added wrapper div with question-page class */}
+      <div className="glass-container">
+        <h1 className="title">Our Special Memories 💖</h1>
+        
+        <DialogueBox 
+          animal="bear" 
+          message="Here are Masoom's favorite moments with you, User! I hope they bring back wonderful memories."
+        />
+        
+        <div className="memories-grid" style={isChromeMobile ? {
+          maxHeight: '60vh',
+          overflowY: 'auto',
+          paddingRight: '5px'
+        } : {}}>
+          {MEMORIES.map(memory => (
+            <div key={memory.id} className="memory-card">
+              {renderMedia(memory)}
+              <p style={{ 
+                textAlign: 'center', 
+                padding: '10px',
+                background: 'rgba(255,255,255,0.5)',
+                margin: '0' 
+              }}>
+                {memory.caption}
+              </p>
+            </div>
+          ))}
+        </div>
+        
+        <div style={{ textAlign: 'center', margin: '30px 0' }}>
+          <button className="btn" onClick={handleContinue}>
+            Few Questions
+          </button>
+        </div>
       </div>
     </div>
   );

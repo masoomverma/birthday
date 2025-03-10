@@ -54,64 +54,66 @@ const Feedback = () => {
   };
 
   return (
-    <div className="glass-container">
-      <h1 className="title">What are you thinking?</h1>
-      
-      <DialogueBox 
-        animal="owl" 
-        message="How was this little web journey? Do you think it was worth Masoom creating this for you?"
-      />
-      
-      <div style={{ marginTop: '20px' }}>
-        <div style={{ marginBottom: '20px' }}>
-          <label 
-            htmlFor="feedback" 
-            style={{ display: 'block', marginBottom: '10px', fontWeight: 'bold' }}
-          >
-            Would you like to share?
-          </label>
-          
-          <textarea 
-            id="feedback"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Write your message here..."
-            style={{
-              width: '100%',
-              padding: '15px',
-              borderRadius: '10px',
-              border: '1px solid #ddd',
-              minHeight: '150px',
-              fontSize: '1rem'
-            }}
-          />
-        </div>
+    <div className="question-page"> {/* Added wrapper with question-page class */}
+      <div className="glass-container">
+        <h1 className="title">What are you thinking?</h1>
         
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          gap: '15px', 
-          marginTop: '25px' 
-        }}>
-          <button 
-            className="btn"
-            onClick={handleSubmit}
-            disabled={isSaving || !message.trim()}
-            style={{ 
-              opacity: (isSaving || !message.trim()) ? 0.7 : 1 
-            }}
-          >
-            {isSaving ? 'Saving...' : 'Send'}
-          </button>
+        <DialogueBox 
+          animal="owl" 
+          message="How was this little web journey? Do you think it was worth Masoom creating this for you?"
+        />
+        
+        <div style={{ marginTop: '20px' }}>
+          <div style={{ marginBottom: '20px' }}>
+            <label 
+              htmlFor="feedback" 
+              style={{ display: 'block', marginBottom: '10px', fontWeight: 'bold' }}
+            >
+              Would you like to share?
+            </label>
+            
+            <textarea 
+              id="feedback"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Write your message here..."
+              style={{
+                width: '100%',
+                padding: '15px',
+                borderRadius: '10px',
+                border: '1px solid #ddd',
+                minHeight: '150px',
+                fontSize: '1rem'
+              }}
+            />
+          </div>
           
-          <button 
-            className="btn"
-            onClick={handleSkip}
-            disabled={isSaving}
-            style={{ background: '#888' }}
-          >
-            {isSaving ? 'Saving...' : 'Skip'}
-          </button>
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            gap: '15px', 
+            marginTop: '25px' 
+          }}>
+            <button 
+              className="btn"
+              onClick={handleSubmit}
+              disabled={isSaving || !message.trim()}
+              style={{ 
+                opacity: (isSaving || !message.trim()) ? 0.7 : 1 
+              }}
+            >
+              {isSaving ? '...' : 'Send'}
+            </button>
+            
+            <button 
+              className="btn"
+              onClick={handleSkip}
+              disabled={isSaving}
+              style={{ background: '#888' }}
+            >
+              {isSaving ? '...' : 'Skip'}
+            </button>
+          </div>
         </div>
       </div>
     </div>

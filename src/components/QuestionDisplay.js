@@ -517,7 +517,7 @@ const QuestionDisplay = ({ questionId, onAnswer, previousAnswer = null, onFollow
                 background: 'linear-gradient(90deg, rgba(255,107,107,0.8), rgba(255,143,177,0.8))'
               }}
             >
-              Send
+              Save
             </button>
             
             <button

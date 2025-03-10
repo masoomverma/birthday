@@ -17,8 +17,32 @@ import PageDecorations from './components/PageDecorations';
 const ViewportContainer = ({ children }) => {
   const [scale, setScale] = useState('');
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 1024);
+  const [isChromeMobile, setIsChromeMobile] = useState(false);
   
   useEffect(() => {
+    // Better Chrome mobile detection
+    const isChrome = /Chrome/i.test(navigator.userAgent) && /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isChrome) {
+      document.body.classList.add('chrome-mobile');
+      setIsChromeMobile(true);
+      
+      // Prevent body scrolling completely in Chrome mobile
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.height = '100%';
+      document.body.style.overflow = 'hidden';
+      
+      // Handle page visibility changes (when address bar appears/disappears)
+      document.addEventListener('visibilitychange', () => {
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+        }, 50);
+      });
+      
+      // Force scroll to top
+      window.scrollTo(0, 0);
+    }
+    
     const checkViewportSize = () => {
       const viewportHeight = window.innerHeight;
       const viewportWidth = window.innerWidth;
@@ -50,11 +74,20 @@ const ViewportContainer = ({ children }) => {
     checkViewportSize();
     window.addEventListener('resize', checkViewportSize);
     
-    return () => window.removeEventListener('resize', checkViewportSize);
+    return () => {
+      window.removeEventListener('resize', checkViewportSize);
+      if (isChrome) {
+        document.body.style.position = '';
+        document.body.style.width = '';
+        document.body.style.height = '';
+        document.body.style.overflow = '';
+        document.removeEventListener('visibilitychange', () => {});
+      }
+    };
   }, []);
   
   return (
-    <div className={`viewport-container ${isDesktop ? 'desktop-view' : 'mobile-view'}`}>
+    <div className={`viewport-container ${isDesktop ? 'desktop-view' : 'mobile-view'} ${isChromeMobile ? 'chrome-mobile' : ''}`}>
       <div className={`scale-content ${scale}`}>
         {children}
       </div>

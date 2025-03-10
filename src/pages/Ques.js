@@ -140,38 +140,40 @@ const Ques = () => {
   if (!currentQuestion && !showSummary) return <div className="glass-container"><p>Loading questions...</p></div>;
 
   return (
-    <div className="glass-container">
-      {!showSummary ? (
-        <>
-          <h1 className="title" style={styles.title}>Question {questionIndex + 1}/{questions.length}</h1>
-          
-          <DialogueBox 
-            animal={questionIndex % 2 === 0 ? "cat" : "fox"} 
-            message={currentQuestion.question}
-          />
-          
-          {/* Add more compact styling to the question display section */}
-          <div className="question-display-wrapper" style={styles.questionDisplayWrapper}>
-            <QuestionDisplay 
-              questionId={currentQuestion.id}
-              onAnswer={handleQuestionAnswered}
-              previousAnswer={getPreviousAnswer()}
-              onFollowUpShown={handleFollowUpShown}
-              onNavigate={handleNavigation}
+    <div className="question-page"> {/* Added wrapper div with class for targeting */}
+      <div className="glass-container">
+        {!showSummary ? (
+          <>
+            <h1 className="title" style={styles.title}>Question {questionIndex + 1}/{questions.length}</h1>
+            
+            <DialogueBox 
+              animal={questionIndex % 2 === 0 ? "cat" : "fox"} 
+              message={currentQuestion.question}
             />
-          </div>
-          
-          {/* Progress bar */}
-          <div className="progress-bar" style={styles.progressBar}>
-            <div style={styles.progressBarFill}></div>
-          </div>
-        </>
-      ) : (
-        <SummaryView 
-          completedQuestions={completedQuestions} 
-          onNavigateToQuestion={handleNavigateToQuestion}
-        />
-      )}
+            
+            {/* Add more compact styling to the question display section */}
+            <div className="question-display-wrapper" style={styles.questionDisplayWrapper}>
+              <QuestionDisplay 
+                questionId={currentQuestion.id}
+                onAnswer={handleQuestionAnswered}
+                previousAnswer={getPreviousAnswer()}
+                onFollowUpShown={handleFollowUpShown}
+                onNavigate={handleNavigation}
+              />
+            </div>
+            
+            {/* Progress bar */}
+            <div className="progress-bar" style={styles.progressBar}>
+              <div style={styles.progressBarFill}></div>
+            </div>
+          </>
+        ) : (
+          <SummaryView 
+            completedQuestions={completedQuestions} 
+            onNavigateToQuestion={handleNavigateToQuestion}
+          />
+        )}
+      </div>
     </div>
   );
 };

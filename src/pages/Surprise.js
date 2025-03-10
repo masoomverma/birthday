@@ -296,94 +296,96 @@ const Surprise = () => {
   };
 
   return (
-    <div className="glass-container">
-      <h1 className="title">The little journey ends here</h1>
-      
-      {showFinalMessage ? (
-        <>
-          <DialogueBox 
-            animal="lion" 
-            message="Congratulations on completing the birthday journey! Here's the final message from Masoom."
-          />
-          
-          <div className="special-message" style={{
-            background: 'rgba(255, 255, 255, 0.7)',
-            borderRadius: '15px',
-            padding: '25px',
-            textAlign: 'center',
-            margin: '30px 0',
-            boxShadow: '0 10px 30px rgba(255, 107, 107, 0.2)',
-            animation: 'bounceIn 1s',
-            transform: 'translateZ(0)',
-            willChange: 'transform, opacity'
-          }}>
-            <h2 style={{ color: '#ff6b6b' }}>Dear User,</h2>
-            <p style={{ fontSize: '1.2rem', lineHeight: '1.6', padding: '10px 20px' }}>
-              "On this special day, I want you to know how much joy and happiness you bring to my journey.
-              Keep smiling always, and may God bless you with everything you deserve.
-              May this new year of your life be filled with laughter, love, and all the beautiful things you wish for!"
-            </p>
-            <p style={{ fontSize: '1.3rem', fontWeight: 'bold', marginTop: '20px' }}>
-              Once again wish you the Happiest Birthday Yrrrr! 🎂
-            </p>
+    <div className="question-page"> {/* Added question-page class wrapper */}
+      <div className="glass-container">
+        <h1 className="title">The little journey ends here</h1>
+        
+        {showFinalMessage ? (
+          <>
+            <DialogueBox 
+              animal="lion" 
+              message="Congratulations on completing the birthday journey! Here's the final message from Masoom."
+            />
+            
+            <div className="special-message" style={{
+              background: 'rgba(255, 255, 255, 0.7)',
+              borderRadius: '15px',
+              padding: '25px',
+              textAlign: 'center',
+              margin: '30px 0',
+              boxShadow: '0 10px 30px rgba(255, 107, 107, 0.2)',
+              animation: 'bounceIn 1s',
+              transform: 'translateZ(0)',
+              willChange: 'transform, opacity'
+            }}>
+              <h2 style={{ color: '#ff6b6b' }}>Dear User,</h2>
+              <p style={{ fontSize: '1.2rem', lineHeight: '1.6', padding: '10px 20px' }}>
+                "On this special day, I want you to know how much joy and happiness you bring to my journey.
+                Keep smiling always, and may God bless you with everything you deserve.
+                May this new year of your life be filled with laughter, love, and all the beautiful things you wish for!"
+              </p>
+              <p style={{ fontSize: '1.3rem', fontWeight: 'bold', marginTop: '20px' }}>
+                Once again wish you the Happiest Birthday Yrrrr! 🎂
+              </p>
+            </div>
+            
+            <div className="effect-buttons" style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              gap: '15px',
+              marginTop: '30px'
+            }}>
+              <button 
+                className="btn" 
+                onClick={() => triggerEffect('hearts')}
+                disabled={activeEffect === 'hearts'}
+                style={{ 
+                  background: activeEffect === 'hearts' ? '#ff6b6b' : '',
+                  opacity: activeEffect && activeEffect !== 'hearts' ? 0.7 : 1
+                }}
+              >
+                Show Hearts ❤️
+              </button>
+              <button 
+                className="btn" 
+                onClick={() => triggerEffect('fireworks')}
+                disabled={activeEffect === 'fireworks'}
+                style={{ 
+                  background: activeEffect === 'fireworks' ? '#ff6b6b' : '',
+                  opacity: activeEffect && activeEffect !== 'fireworks' ? 0.7 : 1
+                }}
+              >
+                Launch Fireworks 🎆
+              </button>
+              <button 
+                className="btn" 
+                onClick={() => triggerEffect('balloons')}
+                disabled={activeEffect === 'balloons'}
+                style={{ 
+                  background: activeEffect === 'balloons' ? '#ff6b6b' : '',
+                  opacity: activeEffect && activeEffect !== 'balloons' ? 0.7 : 1
+                }}
+              >
+                Release Balloons 🎈
+              </button>
+            </div>
+          </>
+        ) : (
+          <div className="loading-container" style={{ textAlign: 'center', padding: '40px' }}>
+            <div className="loading-spinner"></div>
+            <p>Preparing some effect you might like...</p>
           </div>
-          
-          <div className="effect-buttons" style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            gap: '15px',
-            marginTop: '30px'
-          }}>
-            <button 
-              className="btn" 
-              onClick={() => triggerEffect('hearts')}
-              disabled={activeEffect === 'hearts'}
-              style={{ 
-                background: activeEffect === 'hearts' ? '#ff6b6b' : '',
-                opacity: activeEffect && activeEffect !== 'hearts' ? 0.7 : 1
-              }}
-            >
-              Show Hearts ❤️
-            </button>
-            <button 
-              className="btn" 
-              onClick={() => triggerEffect('fireworks')}
-              disabled={activeEffect === 'fireworks'}
-              style={{ 
-                background: activeEffect === 'fireworks' ? '#ff6b6b' : '',
-                opacity: activeEffect && activeEffect !== 'fireworks' ? 0.7 : 1
-              }}
-            >
-              Launch Fireworks 🎆
-            </button>
-            <button 
-              className="btn" 
-              onClick={() => triggerEffect('balloons')}
-              disabled={activeEffect === 'balloons'}
-              style={{ 
-                background: activeEffect === 'balloons' ? '#ff6b6b' : '',
-                opacity: activeEffect && activeEffect !== 'balloons' ? 0.7 : 1
-              }}
-            >
-              Release Balloons 🎈
-            </button>
-          </div>
-        </>
-      ) : (
-        <div className="loading-container" style={{ textAlign: 'center', padding: '40px' }}>
-          <div className="loading-spinner"></div>
-          <p>Preparing some effect you might like...</p>
+        )}
+        
+        <div className="footer-message" style={{
+          textAlign: 'center',
+          marginTop: '40px',
+          fontSize: '1.1rem',
+          opacity: 0.8
+        }}>
+          <p>Made with ❤️ especially for U</p>
         </div>
-      )}
-      
-      <div className="footer-message" style={{
-        textAlign: 'center',
-        marginTop: '40px',
-        fontSize: '1.1rem',
-        opacity: 0.8
-      }}>
-        <p>Made with ❤️ especially for U</p>
       </div>
     </div>
   );

@@ -95,16 +95,59 @@ body {
 /* Device-specific glass container styles */
 .desktop-view .glass-container {
   max-height: 60rem; /* Don't restrict height on desktop */
-  overflow-y: auto;
-  padding: 100px;
-  margin: 0 auto 0 0;
+  overflow-y: visible;
+  padding: 100px;  /* Increased from 35px */
+  margin: 0 auto; /* Center the container */
+  width: 95%; /* Ensure consistent width */
+  max-width: 1100px; /* Set maximum width */
 }
 
+/* Modified for fixed-height mobile glass container */
 .mobile-view .glass-container {
-  max-height: 94vh;
+  max-height: 94vh;  /* Increased from 92vh */
   overflow-y: auto;
-  padding: clamp(18px, 3.5vw, 30px);
-  margin: 10px auto 10px 0;
+  padding: clamp(18px, 3.5vw, 30px); /* Increased padding */
+  margin: 10px auto; /* Center the container */
+  display: flex;
+  flex-direction: column;
+  /* Fix for Chrome mobile address bar issue */
+  position: relative;
+  height: 85vh; /* Fixed height */
+  width: 90%; /* Fixed width */
+  min-width: 300px; /* Minimum width */
+  max-width: 550px; /* Maximum width on mobile */
+  transform: translateZ(0); /* Hardware acceleration */
+  will-change: transform; /* Optimize for animations */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* Question page specific container with fixed height and width */
+.mobile-view .question-page .glass-container {
+  height: 85vh; /* Fixed height for questions */
+  min-height: 500px; /* Minimum height */
+  width: 92%; /* Slightly wider for questions */
+  max-width: 550px; /* Maximum width */
+  overflow-y: auto; /* Allow scrolling within container */
+  margin: 10px auto; /* Center horizontally */
+}
+
+/* Chrome mobile specific fixes */
+.chrome-mobile .viewport-container {
+  height: 100%;
+  min-height: -webkit-fill-available; /* Use available height instead of 100vh */
+  overflow: hidden;
+  width: 100%; 
+}
+
+.chrome-mobile .mobile-view .glass-container {
+  transform: translateZ(0); /* Force hardware acceleration */
+  max-height: 85vh; /* Slightly reduced to prevent overflow */
+  height: 85vh;
+  width: 92%; /* Fixed width */
+  margin: 10px auto; /* Center horizontally */
+  left: 0;
+  right: 0;
 }
 
 /* Prevent container shrinking when options appear */
@@ -156,7 +199,7 @@ body {
   color: white;
   border: none;
   padding: clamp(8px, 3vw, 14px) clamp(15px, 5vw, 28px);
-  border-radius: 50px;
+  border-radius: 20px;
   font-size: clamp(0.9rem, 2vw, 1.1rem);
   font-weight: 700;
   cursor: pointer;
@@ -396,7 +439,7 @@ label {
 /* ===== Responsive Styles ===== */
 @media (max-width: 768px) {
   .glass-container {
-    width: 90%;  /* Increased from 90% */
+    width: 90%;
     padding: 25px;
   }
 
@@ -427,13 +470,28 @@ label {
 /* Enhanced responsive styles for Chrome */
 @media screen and (max-width: 768px) {
   .glass-container {
-    padding: 20px 15px;  /* Increased */
+    padding: 20px 15px;
+    width: 92% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
   
-  .btn {
-    text-align: left;
-    padding: 10px 20px;
-    font-size: 0.95rem;
+  /* Prevent layout shifts from address bar in Chrome */
+  .chrome-mobile .viewport-container.mobile-view {
+    height: 100%;
+    height: -webkit-fill-available;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+  }
+  
+  /* Fix for question page specifically */
+  .chrome-mobile .question-page .glass-container {
+    height: 85vh;
+    width: 92% !important;
+    overflow-y: auto;
+    margin: 10px auto !important;
   }
 }
 
@@ -598,6 +656,7 @@ label {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
 }
 
 .viewport-container.desktop-view {
@@ -631,9 +690,10 @@ label {
   max-height: 60rem; /* Don't restrict height on desktop */
   overflow-y: visible;
   padding: 100px;  /* Increased from 35px */
-  margin: 0 auto 0 0; /* Added to ensure consistency */
+  margin: 0 auto; /* Added to ensure consistency */
 }
 
+/* Modified for fixed-height mobile glass container */
 .mobile-view .glass-container {
   max-height: 94vh;  /* Increased from 92vh */
   overflow-y: auto;
@@ -641,6 +701,33 @@ label {
   margin: 10px auto 10px 0; /* Changed from "10px auto" */
   display: flex;
   flex-direction: column;
+  /* Fix for Chrome mobile address bar issue */
+  position: relative;
+  height: 85vh; /* Fixed height */
+  transform: translateZ(0); /* Hardware acceleration */
+  will-change: transform; /* Optimize for animations */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* Question page specific container with fixed height */
+.mobile-view .question-page .glass-container {
+  height: 85vh; /* Fixed height for questions */
+  min-height: 500px; /* Minimum height */
+  overflow-y: auto; /* Allow scrolling within container */
+}
+
+/* Chrome mobile specific fixes */
+.chrome-mobile .viewport-container {
+  height: 100%;
+  min-height: -webkit-fill-available; /* Use available height instead of 100vh */
+  overflow: hidden;
+}
+
+.chrome-mobile .mobile-view .glass-container {
+  transform: translateZ(0); /* Force hardware acceleration */
+  max-height: 85vh; /* Slightly reduced to prevent overflow */
+  height: 85vh;
 }
 
 /* Content scaling utilities with improved laptop handling */
@@ -688,6 +775,63 @@ label {
 /* Device-specific responsive styles */
 @media screen and (max-width: 768px) {
   /* ...existing media query content... */
+  
+  /* Chrome mobile specific fixes - NEW FIXES FOR ALL PAGES */
+  .chrome-mobile body {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  .chrome-mobile.mobile-view .viewport-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  /* Fixed position for all pages in Chrome mobile */
+  .chrome-mobile.mobile-view .question-page .glass-container,
+  .chrome-mobile.mobile-view .glass-container {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+    height: 80vh !important;
+    width: 90% !important;
+    max-height: 80vh !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  
+  /* Specific fix for memories grid */
+  .chrome-mobile.mobile-view .memories-grid {
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 5px; /* Add space for scrollbar */
+  }
+  
+  /* Ensure images don't cause container jumping */
+  .chrome-mobile.mobile-view .memory-img,
+  .chrome-mobile.mobile-view .memory-video {
+    height: 150px !important;
+  }
+  
+  /* Add mask on memories page to prevent interaction with background */
+  .chrome-mobile.mobile-view .question-page::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.01);
+    z-index: -1;
+  }
 }
 
 /* Modified height-based media queries to be less aggressive */
@@ -783,4 +927,30 @@ label {
   .options-container, div[style*="optionsContainer"] {
     grid-template-columns: 1fr 1fr !important;
   }
+}
+
+/* Fixed centering for all glass containers */
+.question-page .glass-container {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  left: 0 !important;
+  right: 0 !important;
+  transform: translateY(20px) !important;
+}
+
+.chrome-mobile.mobile-view .question-page .glass-container {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+}
+
+/* Fix for initial rendering of ThankYou page */
+.chrome-mobile.mobile-view .thank-you-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }
