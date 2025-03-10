@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import './App.css';
 import { AuthProvider, useAuth } from './auth/AuthContext';
 import Login from './auth/login'; 
+import PullToRefresh from './components/PullToRefresh';
 
 // Import pages
 import Surprise from './pages/Surprise';
@@ -26,23 +27,29 @@ const ViewportContainer = ({ children }) => {
       document.body.classList.add('chrome-mobile');
       setIsChromeMobile(true);
       
-      // Prevent body scrolling completely in Chrome mobile
+      // Use a less restrictive approach for fixed positioning to allow refreshes
       document.body.style.position = 'fixed';
       document.body.style.width = '100%';
       document.body.style.height = '100%';
       document.body.style.overflow = 'hidden';
-      
-      // Handle page visibility changes (when address bar appears/disappears)
-      document.addEventListener('visibilitychange', () => {
-        setTimeout(() => {
-          window.scrollTo(0, 0);
-        }, 50);
-      });
-      
-      // Force scroll to top
-      window.scrollTo(0, 0);
     }
-    
+
+    // Handle page refresh/unload
+    const handleBeforeUnload = () => {
+      // Reset body styles before page refresh
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.height = '';
+      document.body.style.overflow = '';
+    };
+
+    // Handle browser navigation
+    const handlePopState = () => {
+      // Reset scroll position on navigation
+      window.scrollTo(0, 0);
+    };
+
+    // Check viewport size
     const checkViewportSize = () => {
       const viewportHeight = window.innerHeight;
       const viewportWidth = window.innerWidth;
@@ -57,9 +64,8 @@ const ViewportContainer = ({ children }) => {
         } else {
           setScale('');
         }
-      } 
-      // Mobile devices need more aggressive scaling
-      else {
+      } else {
+        // Mobile devices need more aggressive scaling
         setIsDesktop(false);
         if (contentHeight > viewportHeight * 1.3) {
           setScale('scale-content-xs');
@@ -70,22 +76,20 @@ const ViewportContainer = ({ children }) => {
         }
       }
     };
-    
-    checkViewportSize();
+
+    // Add event listeners
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('popstate', handlePopState);
     window.addEventListener('resize', checkViewportSize);
-    
+
+    // Cleanup function
     return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('popstate', handlePopState);
       window.removeEventListener('resize', checkViewportSize);
-      if (isChrome) {
-        document.body.style.position = '';
-        document.body.style.width = '';
-        document.body.style.height = '';
-        document.body.style.overflow = '';
-        document.removeEventListener('visibilitychange', () => {});
-      }
     };
   }, []);
-  
+
   return (
     <div className={`viewport-container ${isDesktop ? 'desktop-view' : 'mobile-view'} ${isChromeMobile ? 'chrome-mobile' : ''}`}>
       <div className={`scale-content ${scale}`}>
@@ -103,7 +107,7 @@ const ProtectedRoute = ({ children }) => {
     // Redirect to login if not authenticated
     return <Navigate to="/login" replace />;
   }
-  
+
   return (
     <ViewportContainer>
       {children}
@@ -118,9 +122,12 @@ function App() {
     confettiScript.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js';
     confettiScript.async = true;
     document.body.appendChild(confettiScript);
-    
+
+    // Add a global flag to help detect refresh gestures
+    window.__enablePullToRefresh = true;
+
+    // Cleanup
     return () => {
-      // Cleanup
       if (document.body.contains(confettiScript)) {
         document.body.removeChild(confettiScript);
       }
@@ -131,13 +138,12 @@ function App() {
     <AuthProvider>
       <div className="birthday-app">
         <PageDecorations />
-        
+        <PullToRefresh /> {/* This is where we use PullToRefresh */}
         <Router>
           <Routes>
             {/* Make login the default route */}
             <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/login" element={<Login />} />
-            
             {/* Protected Routes */}
             <Route path="/ThankYou" element={
               <ProtectedRoute>
@@ -169,7 +175,6 @@ function App() {
                 <Surprise />
               </ProtectedRoute>
             } />
-            
             {/* Catch all undefined routes and redirect to login */}
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>

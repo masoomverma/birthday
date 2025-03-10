@@ -120,6 +120,9 @@ body {
   will-change: transform; /* Optimize for animations */
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
 }
 
 /* Question page specific container with fixed height and width */
@@ -832,6 +835,22 @@ label {
     background: rgba(0,0,0,0.01);
     z-index: -1;
   }
+  
+  /* Ensure body is always refreshable */
+  html, body {
+    overscroll-behavior-y: contain;
+  }
+  
+  /* Allow pull-to-refresh even with fixed positioning */
+  .chrome-mobile body {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    /* Add this to allow pull-to-refresh */
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 /* Modified height-based media queries to be less aggressive */
@@ -953,4 +972,211 @@ label {
   align-items: center;
   height: 100%;
   width: 100%;
+}
+
+/* Pull to refresh styles */
+.refresh-indicator {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  pointer-events: none;
+  animation: fadeIn 0.3s;
+}
+
+.refresh-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 107, 107, 0.3);
+  border-top-color: #ff6b6b;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Ensure proper overscroll behavior for pull-to-refresh */
+.chrome-mobile.mobile-view {
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Modify existing styles to enable pull to refresh */
+@media screen and (max-width: 768px) {
+  /* ...existing media query content... */
+  
+  /* Allow pull-to-refresh even with fixed positioning */
+  .chrome-mobile body {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    /* Change to allow for pull-to-refresh */
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Make glass container responsive to pull gesture */
+  .chrome-mobile.mobile-view .question-page .glass-container {
+    transition: transform 0.2s ease;
+  }
+  
+  /* ...existing code... */
+}
+
+/* Chrome-style Pull-to-refresh indicator */
+@keyframes ptr-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.pull-to-refresh-indicator {
+  position: fixed;
+  top: -70px;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  transition: transform 0.3s ease;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.ptr-spinner {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 107, 107, 0.3);
+  border-top-color: #ff6b6b;
+  margin-bottom: 8px;
+}
+
+.pull-to-refresh-indicator.refreshing .ptr-spinner {
+  animation: ptr-rotate 0.8s linear infinite;
+}
+
+.ptr-text {
+  color: #ff6b6b;
+  font-weight: bold;
+  font-size: 14px;
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+}
+
+/* Enhanced Pull-to-refresh indicator */
+.pull-to-refresh-indicator {
+  position: fixed;
+  top: -70px;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  transition: transform 0.3s ease;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.ptr-spinner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 107, 107, 0.3);
+  border-top-color: #ff6b6b;
+  margin-bottom: 10px;
+  transition: border-color 0.3s ease;
+}
+
+.pull-to-refresh-indicator.refreshing .ptr-spinner {
+  animation: ptr-rotate 0.8s linear infinite;
+}
+
+.ptr-text {
+  color: #ff6b6b;
+  font-weight: bold;
+  font-size: 14px;
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 5px 10px;
+  border-radius: 15px;
+}
+
+/* Fix for glass container scrolling when pulling */
+.mobile-view .glass-container {
+  /* ...existing code... */
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+/* Add Chrome-specific refresh visualizations */
+.chrome-mobile body:after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(90deg, #ff6b6b, #ff9eb5, #ff6b6b);
+  transform: translateY(-100%);
+  opacity: 0;
+  z-index: 10000;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  background-size: 200% 100%;
+}
+
+html.refreshing body:after {
+  transform: translateY(0);
+  opacity: 1;
+  animation: loading 1s linear infinite;
+}
+
+@keyframes loading {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}
+
+/* Simplified Pull-to-refresh styling */
+@keyframes ptr-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Prevent scroll bouncing */
+html, body {
+  overscroll-behavior-y: contain;
+  touch-action: manipulation;
+}
+
+/* Fix for Chrome mobile specific styles */
+@media screen and (max-width: 768px) {
+  /* ...existing media query content... */
+  
+  /* Chrome mobile specific fixes - Explicitly allow pull-to-refresh */
+  .chrome-mobile body {
+    /* ...existing styles... */
+    touch-action: pan-x pan-y; /* Allow vertical scrolling */
+    overscroll-behavior-y: contain; /* Prevent bounce but allow pull-refresh */
+  }
+  
+  /* Improve pull-to-refresh behavior on glass containers */
+  .glass-container {
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Improved Pull-to-refresh styling */
+.pull-zone {
+  pointer-events: none;
+  user-select: none;
+  font-family: 'Nunito', sans-serif;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.8);
 }

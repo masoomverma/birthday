@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DialogueBox from '../components/DialogueBox';
 import { saveChoice } from '../utils/saveChoice';
@@ -8,6 +8,36 @@ const Feedback = () => {
   const [message, setMessage] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   
+  // Restore message from localStorage on mount
+  useEffect(() => {
+    const savedMessage = localStorage.getItem('feedback_message');
+    if (savedMessage) {
+      setMessage(savedMessage);
+    }
+    
+    // Handle beforeunload to ensure proper cleanup
+    const handleBeforeUnload = () => {
+      if (message.trim()) {
+        localStorage.setItem('feedback_message', message);
+      }
+    };
+    
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      // Don't remove the saved message on regular component unmount
+      // so it's available after reload/refresh
+    };
+  }, [message]);
+  
+  // Save message to localStorage whenever it changes
+  useEffect(() => {
+    if (message.trim()) {
+      localStorage.setItem('feedback_message', message);
+    }
+  }, [message]);
+  
   const handleSubmit = async () => {
     if (!message.trim()) return;
     
@@ -15,10 +45,12 @@ const Feedback = () => {
     
     try {
       // Only save feedback once using the saveChoice method
-      // This will handle both storage in choices collection and feedback collection
       await saveChoice('feedback', 'User Feedback', {
         message: message,
       }, true);
+      
+      // Clear local storage after successful submission
+      localStorage.removeItem('feedback_message');
       
       // Navigate directly to surprise page - decreased delay from 1000ms to 400ms
       setTimeout(() => {
@@ -40,6 +72,9 @@ const Feedback = () => {
       await saveChoice('feedback', 'User Feedback', {
         message: "No feedback provided",
       }, true);
+      
+      // Clear local storage
+      localStorage.removeItem('feedback_message');
       
       // Navigate after a brief delay - keeping this at 300ms since it's already short
       setTimeout(() => {
